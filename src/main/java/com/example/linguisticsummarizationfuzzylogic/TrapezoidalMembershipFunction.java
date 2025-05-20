@@ -18,10 +18,16 @@ public class TrapezoidalMembershipFunction implements MembershipFunction {
         if (value < a || value > d) {
             return 0.0;
         } else if (value >= a && value <= b) {
+            if (b == a) {
+                return 1.0;
+            }
             return (value - a) / (b - a);
-        } else if (value > b && value < c) {
+        } else if (value >= b && value <= c) {
             return 1.0;
         } else if (value >= c && value <= d) {
+            if (d == c) {
+                return 1.0;
+            }
             return (d - value) / (d - c);
         }
         return 0.0;
