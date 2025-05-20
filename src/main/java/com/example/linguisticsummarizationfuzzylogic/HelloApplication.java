@@ -15,6 +15,14 @@ public class HelloApplication extends Application {
         stage.setTitle("Hi!");
         stage.setScene(scene);
         stage.show();
+
+        // Load data from xlsx file controller
+        ElectoralDistricts electoralDistricts = new ElectoralDistricts();
+        ExcelDataController excelDataController = new ExcelDataController(electoralDistricts);
+        excelDataController.loadDataFromExcel("src/main/resources/com/example/linguisticsummarizationfuzzylogic/wybory2020.xlsx");
+        System.out.println(electoralDistricts.getDistricts().get(0).toString());
+
+
     }
 
     public static void main(String[] args) {
