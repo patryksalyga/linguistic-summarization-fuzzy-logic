@@ -11,11 +11,11 @@ public class ElectoralDistrict {
     private double postalVoteShare;
     private double invalidBallotsRate;
     private double votingEffectiveness;
-    private int proxyVotersCount;
+    private double proxyVotersCount;
     private double candidateASupport;
     private double candidateBSupport;
 
-    public ElectoralDistrict(String areaType, String voivodeship, double commissionPreparationLevel, double surplusBallots, double voterTurnout, double voterMobilization, double ballotBoxConsistency, double postalVoteShare, double invalidBallotsRate, double votingEffectiveness, int proxyVotersCount, double candidateASupport, double candidateBSupport) {
+    public ElectoralDistrict(String areaType, String voivodeship, double commissionPreparationLevel, double surplusBallots, double voterTurnout, double voterMobilization, double ballotBoxConsistency, double postalVoteShare, double invalidBallotsRate, double votingEffectiveness, double proxyVotersCount, double candidateASupport, double candidateBSupport) {
         this.areaType = areaType;
         this.voivodeship = voivodeship;
         this.commissionPreparationLevel = commissionPreparationLevel;
@@ -71,7 +71,7 @@ public class ElectoralDistrict {
         return votingEffectiveness;
     }
 
-    public int getProxyVotersCount() {
+    public double getProxyVotersCount() {
         return proxyVotersCount;
     }
 

@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LinguisticRepositoryTest {
     private static LinguisticRepository linguisticRepository;
@@ -68,6 +68,20 @@ public class LinguisticRepositoryTest {
         assertEquals(0.0, linguisticRepository.getLinguisticVariables().get(1).getTerms().get(3).getMembershipFunction().getMembership(0.15), 0.0001);
         assertEquals(1.0, linguisticRepository.getLinguisticVariables().get(1).getTerms().get(3).getMembershipFunction().getMembership(0.17), 0.0001);
         assertEquals(1.0, linguisticRepository.getLinguisticVariables().get(1).getTerms().get(3).getMembershipFunction().getMembership(1.0), 0.0001);
+    }
+
+    @Test
+    public void testToggleLinguisticTerm() {
+        // Test if the first term is enabled
+        assertFalse(linguisticRepository.getLinguisticVariables().get(0).getTerms().get(0).isEnabled());
+        assertFalse(linguisticRepository.getLinguisticVariables().get(0).getTerms().get(1).isEnabled());
+        assertFalse(linguisticRepository.getLinguisticVariables().get(1).getTerms().get(0).isEnabled());
+        linguisticRepository.getLinguisticVariables().get(0).getTerms().get(0).toggle();
+        assertTrue(linguisticRepository.getLinguisticVariables().get(0).getTerms().get(0).isEnabled());
+        assertFalse(linguisticRepository.getLinguisticVariables().get(0).getTerms().get(1).isEnabled());
+        assertFalse(linguisticRepository.getLinguisticVariables().get(1).getTerms().get(0).isEnabled());
+        linguisticRepository.getLinguisticVariables().get(0).getTerms().get(0).toggle();
+        assertFalse(linguisticRepository.getLinguisticVariables().get(0).getTerms().get(0).isEnabled());
     }
 
     @AfterAll

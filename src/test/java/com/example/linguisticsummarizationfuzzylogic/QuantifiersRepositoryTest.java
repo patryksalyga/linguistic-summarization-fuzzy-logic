@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class QuantifiersRepositoryTest {
     private static QuantifiersRepository quantifiersRepository;
@@ -74,6 +74,16 @@ public class QuantifiersRepositoryTest {
         assertEquals("Prawie wszyscy", quantifiersRepository.getRelativeQuantifiers().get(4).getLabel());
         assertEquals(0.0, quantifiersRepository.getRelativeQuantifiers().get(4).getMembership(0.9));
         assertEquals(1.0, quantifiersRepository.getRelativeQuantifiers().get(4).getMembership(0.95));
+    }
+
+    @Test
+    public void testToggleQuantifier() {
+        // Test if the quantifier can be toggled
+        assertFalse(quantifiersRepository.getAbsoluteQuantifiers().get(0).isEnabled());
+        quantifiersRepository.getAbsoluteQuantifiers().get(0).toggle();
+        assertTrue(quantifiersRepository.getAbsoluteQuantifiers().get(0).isEnabled());
+        quantifiersRepository.getAbsoluteQuantifiers().get(0).toggle();
+        assertFalse(quantifiersRepository.getAbsoluteQuantifiers().get(0).isEnabled());
     }
 
     @AfterAll
