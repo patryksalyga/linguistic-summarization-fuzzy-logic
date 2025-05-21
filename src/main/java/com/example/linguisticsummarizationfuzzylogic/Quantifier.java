@@ -9,6 +9,10 @@ public abstract class Quantifier {
         this.membershipFunction = membershipFunction;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
     public double getMembership(double value) {
         return membershipFunction.getMembership(value);
     }

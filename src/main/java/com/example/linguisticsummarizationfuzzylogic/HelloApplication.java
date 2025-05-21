@@ -20,8 +20,6 @@ public class HelloApplication extends Application {
         ElectoralDistricts electoralDistricts = new ElectoralDistricts();
         ExcelDataController excelDataController = new ExcelDataController(electoralDistricts);
         excelDataController.loadDataFromExcel("src/main/resources/com/example/linguisticsummarizationfuzzylogic/wybory2020.xlsx");
-        System.out.println(electoralDistricts.getDistricts().get(0).toString());
-
 
     }
 
