@@ -40,7 +40,13 @@ public class SummaryQualityEvaluator {
 
     private double computeT1() {
         // Degree of Truth
-        return linguisticSummary.getQuantifier().getMembership((double) linguisticSummary.getFuzzySet().getSupport().size() / linguisticSummary.getFuzzySet().getUniverseOfDiscourse().size());
+        if (linguisticSummary.getQuantifier().getClass() == AbsoluteQuantifier.class) {
+            return linguisticSummary.getQuantifier().getMembership(linguisticSummary.getFuzzySet().getSupport().size());
+        } else if (linguisticSummary.getQuantifier().getClass() == RelativeQuantifier.class) {
+            return linguisticSummary.getQuantifier().getMembership((double) linguisticSummary.getFuzzySet().getSupport().size() / linguisticSummary.getFuzzySet().getUniverseOfDiscourse().size());
+        } else {
+            return 0.0;
+        }
     }
 
     private double computeT2() {

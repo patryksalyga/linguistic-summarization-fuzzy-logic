@@ -82,4 +82,8 @@ public class LinguisticSummary {
     public int getElectoralDistrictsCount() {
         return electoralDistrictsCount;
     }
+
+    public SummaryQualityEvaluator getSummaryQualityEvaluator() {
+        return summaryQualityEvaluator;
+    }
 }

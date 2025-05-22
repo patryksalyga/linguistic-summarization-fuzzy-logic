@@ -1,5 +1,5 @@
 label,type,a,b,c,d
 Mniej niż 10,trapezoidal,0,0,5,10
 Około 100,triangular,75,100,125
-Ponad 200,trapezoidal,180,200,INF,INF
-Więcej niż 500,trapezoidal,450,500,INF,INF
+Ponad 200,trapezoidal,180,200,30000,30000
+Więcej niż 500,trapezoidal,450,500,30000,30000

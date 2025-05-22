@@ -11,7 +11,7 @@ Frekwencja wyborcza,Niska,trapezoidal,0.0,0.0,0.4,0.41
 Frekwencja wyborcza,Przeciętna,triangular,0.4,0.5,0.61
 Frekwencja wyborcza,Wysoka,triangular,0.6,0.7,0.8
 Frekwencja wyborcza,Rekordowa,trapezoidal,0.8,0.85,1,1
-Mobilność wyborcza:Marginalna,trapezoidal,0.0,0.0,0.01,0.011
+Mobilność wyborcza,Marginalna,trapezoidal,0.0,0.0,0.01,0.011
 Mobilność wyborcza,Zauważalna,triangular,0.01,0.02,0.031
 Mobilność wyborcza,Znaczna,triangular,0.03,0.045,0.06
 Mobilność wyborcza,Wyjątkowo wysoka,trapezoidal,0.06,0.07,1.0,1.0
@@ -19,11 +19,11 @@ Zgodność urny z wydaniami kart,Niska,trapezoidal,0.0,0.0,0.93,0.95
 Zgodność urny z wydaniami kart,Zgodna,triangular,0.95,0.985,1.02
 Zgodność urny z wydaniami kart,Wyższa niż oczekiwano,triangular,1.02,1.035,1.05
 Zgodność urny z wydaniami kart,Podejrzana,trapezoidal,1.05,1.1,INF,INF
-Udział głosów korespondencyjnych:Sporadyczny,trapezoidal,0.0,0.0,0.01,0.011
+Udział głosów korespondencyjnych,Sporadyczny,trapezoidal,0.0,0.0,0.01,0.011
 Udział głosów korespondencyjnych,Umiarkowany,triangular,0.01,0.03,0.051
 Udział głosów korespondencyjnych,Znaczny,triangular,0.05,0.125,0.20
 Udział głosów korespondencyjnych,Dominujący,trapezoidal,0.2,0.25,1.0,1.0
-Skala nieważnych kart:Minimalna,trapezoidal,0.0,0.0,0.005,0.006
+Skala nieważnych kart,Minimalna,trapezoidal,0.0,0.0,0.005,0.006
 Skala nieważnych kart,Typowa,triangular,0.005,0.01,0.015
 Skala nieważnych kart,Podwyższona,triangular,0.015,0.0225,0.03
 Skala nieważnych kart,Alarmująca,trapezoidal,0.03,0.04,1.0,1.0

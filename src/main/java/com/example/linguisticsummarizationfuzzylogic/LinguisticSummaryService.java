@@ -92,10 +92,18 @@ public class LinguisticSummaryService {
             for (AbsoluteQuantifier absoluteQuantifier : absoluteQuantifiers) {
                 LinguisticSummary linguisticSummary = new LinguisticSummary(fuzzySet, absoluteQuantifier, key, electoralDistrictsCount);
                 linguisticSummaries.add(linguisticSummary);
+                linguisticSummary = new LinguisticSummary(fuzzySet.power(2), absoluteQuantifier, "bardzo " + key, electoralDistrictsCount);
+                linguisticSummaries.add(linguisticSummary);
+                linguisticSummary = new LinguisticSummary(fuzzySet.power(0.5), absoluteQuantifier, "mniej więcej " + key, electoralDistrictsCount);
+                linguisticSummaries.add(linguisticSummary);
 
             }
             for (RelativeQuantifier relativeQuantifier : relativeQuantifiers) {
                 LinguisticSummary linguisticSummary = new LinguisticSummary(fuzzySet, relativeQuantifier, key, electoralDistrictsCount);
+                linguisticSummaries.add(linguisticSummary);
+                linguisticSummary = new LinguisticSummary(fuzzySet.power(2), relativeQuantifier, "bardzo " + key, electoralDistrictsCount);
+                linguisticSummaries.add(linguisticSummary);
+                linguisticSummary = new LinguisticSummary(fuzzySet.power(0.5), relativeQuantifier, "mniej więcej " + key, electoralDistrictsCount);
                 linguisticSummaries.add(linguisticSummary);
             }
 
