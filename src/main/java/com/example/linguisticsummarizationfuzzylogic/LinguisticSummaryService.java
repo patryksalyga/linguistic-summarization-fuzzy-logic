@@ -16,10 +16,13 @@ public class LinguisticSummaryService {
     private List<RelativeQuantifier> relativeQuantifiers = new ArrayList<>();
     private Map<String, FuzzySet> fuzzySetsMap = new HashMap<>();
 
+    private final int electoralDistrictsCount;
+
     public LinguisticSummaryService(ElectoralDistricts electoralDistricts, LinguisticRepository linguisticRepository, QuantifiersRepository quantifiersRepository) {
         this.electoralDistricts = electoralDistricts;
         this.linguisticRepository = linguisticRepository;
         this.quantifiersRepository = quantifiersRepository;
+        this.electoralDistrictsCount = electoralDistricts.getDistricts().size();
     }
 
     public void prepareData() {
@@ -68,10 +71,10 @@ public class LinguisticSummaryService {
                         case "Liczba głosujących przez pełnomocnika":
                             values = electoralDistricts.getProxyVotersCounts();
                             break;
-                        case "Poparcie kandydata A":
+                        case "Poparcie dla kandydata A":
                             values = electoralDistricts.getCandidateASupports();
                             break;
-                        case "Poparcie kandydata B":
+                        case "Poparcie dla kandydata B":
                             values = electoralDistricts.getCandidateBSupports();
                             break;
                     }
@@ -87,12 +90,12 @@ public class LinguisticSummaryService {
         for (String key : fuzzySetsMap.keySet()) {
             FuzzySet fuzzySet = fuzzySetsMap.get(key);
             for (AbsoluteQuantifier absoluteQuantifier : absoluteQuantifiers) {
-                LinguisticSummary linguisticSummary = new LinguisticSummary(fuzzySet, absoluteQuantifier, key);
+                LinguisticSummary linguisticSummary = new LinguisticSummary(fuzzySet, absoluteQuantifier, key, electoralDistrictsCount);
                 linguisticSummaries.add(linguisticSummary);
 
             }
             for (RelativeQuantifier relativeQuantifier : relativeQuantifiers) {
-                LinguisticSummary linguisticSummary = new LinguisticSummary(fuzzySet, relativeQuantifier, key);
+                LinguisticSummary linguisticSummary = new LinguisticSummary(fuzzySet, relativeQuantifier, key, electoralDistrictsCount);
                 linguisticSummaries.add(linguisticSummary);
             }
 
@@ -116,12 +119,12 @@ public class LinguisticSummaryService {
             }
 
             for (AbsoluteQuantifier absoluteQuantifier : absoluteQuantifiers) {
-                LinguisticSummary linguisticSummary = new LinguisticSummary(correspondingSets, absoluteQuantifier, currentKeys);
+                LinguisticSummary linguisticSummary = new LinguisticSummary(correspondingSets, absoluteQuantifier, currentKeys, electoralDistrictsCount);
                 linguisticSummaries.add(linguisticSummary);
 
             }
             for (RelativeQuantifier relativeQuantifier : relativeQuantifiers) {
-                LinguisticSummary linguisticSummary = new LinguisticSummary(correspondingSets, relativeQuantifier, currentKeys);
+                LinguisticSummary linguisticSummary = new LinguisticSummary(correspondingSets, relativeQuantifier, currentKeys, electoralDistrictsCount);
                 linguisticSummaries.add(linguisticSummary);
             }
 

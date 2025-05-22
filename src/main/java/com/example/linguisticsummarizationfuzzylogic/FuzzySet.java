@@ -25,6 +25,12 @@ public class FuzzySet {
         this.values = values;
     }
 
+    public FuzzySet(Map<Integer, Double> elements, List<Double> values) {
+        this.elements = elements;
+        this.values = values;
+        this.membershipFunction = null; // Default to null if not provided
+    }
+
     public List<Double> getUniverseOfDiscourse() {
         return values;
     }
@@ -117,5 +123,12 @@ public class FuzzySet {
 
     public Map<Integer, Double> getElements() {
         return elements;
+    }
+
+    @Override
+    public String toString() {
+        return "FuzzySet{" +
+                "elements=" + elements +
+                '}';
     }
 }

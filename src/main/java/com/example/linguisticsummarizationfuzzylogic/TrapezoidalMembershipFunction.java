@@ -32,4 +32,12 @@ public class TrapezoidalMembershipFunction implements MembershipFunction {
         }
         return 0.0;
     }
+
+    public double getLength() {
+        return d - a;
+    }
+
+    public double getClm() {
+        return ((d-a) + (c-b)) / 2;
+    }
 }

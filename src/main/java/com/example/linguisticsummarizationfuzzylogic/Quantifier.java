@@ -26,4 +26,8 @@ public abstract class Quantifier {
     public double getMembership(double value) {
         return membershipFunction.getMembership(value);
     }
+
+    public MembershipFunction getMembershipFunction() {
+        return membershipFunction;
+    }
 }

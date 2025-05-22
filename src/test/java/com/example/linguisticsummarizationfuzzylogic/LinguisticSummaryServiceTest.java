@@ -54,14 +54,14 @@ public class LinguisticSummaryServiceTest {
                     "Nadmiar kart,Akceptowalny,triangular,0.02,0.05,0.08",
                     "Nadmiar kart,Wysoki,triangular,0.07,0.11,0.15",
                     "Nadmiar kart,Niepokojący,trapezoidal,0.15,0.17,1.0,1.0",
-                    "Poprarcie dla kandydata A,Marginalne,trapezoidal,0.0,0.0,0.1,0.11",
-                    "Poprarcie dla kandydata A,Umiarkowane,triangular,0.1,0.2,0.3",
-                    "Poprarcie dla kandydata A,Silne,triangular,0.3,0.45,0.7",
-                    "Poprarcie dla kandydata A,Dominujące,trapezoidal,0.6,0.7,1.0,1.0",
-                    "Poprarcie dla kandydata B,Marginalne,trapezoidal,0.0,0.0,0.1,0.11",
-                    "Poprarcie dla kandydata B,Umiarkowane,triangular,0.1,0.2,0.3",
-                    "Poprarcie dla kandydata B,Silne,triangular,0.3,0.45,0.7",
-                    "Poprarcie dla kandydata B,Dominujące,trapezoidal,0.6,0.7,1.0,1.0"
+                    "Poparcie dla kandydata A,Marginalne,trapezoidal,0.0,0.0,0.1,0.11",
+                    "Poparcie dla kandydata A,Umiarkowane,triangular,0.1,0.2,0.3",
+                    "Poparcie dla kandydata A,Silne,triangular,0.3,0.45,0.7",
+                    "Poparcie dla kandydata A,Dominujące,trapezoidal,0.6,0.7,1.0,1.0",
+                    "Poparcie dla kandydata B,Marginalne,trapezoidal,0.0,0.0,0.1,0.11",
+                    "Poparcie dla kandydata B,Umiarkowane,triangular,0.1,0.2,0.3",
+                    "Poparcie dla kandydata B,Silne,triangular,0.3,0.45,0.7",
+                    "Poparcie dla kandydata B,Dominujące,trapezoidal,0.6,0.7,1.0,1.0"
             ));
 
             linguisticRepository.loadFromCSV(tempFile3.toString());
@@ -81,13 +81,14 @@ public class LinguisticSummaryServiceTest {
 
     @Test
     public void testLinguisticSummary() {
-        linguisticRepository.getLinguisticVariables().get(0).getTerms().get(1).toggle();
-        linguisticRepository.getLinguisticVariables().get(2).getTerms().get(1).toggle();
-        linguisticRepository.getLinguisticVariables().get(3).getTerms().get(1).toggle();
+        //linguisticRepository.getLinguisticVariables().get(0).getTerms().get(1).toggle();
+        linguisticRepository.getLinguisticVariables().get(2).getTerms().get(2).toggle();
+        linguisticRepository.getLinguisticVariables().get(3).getTerms().get(2).toggle();
 
-        quantifiersRepository.getAbsoluteQuantifiers().get(0).toggle();
-        quantifiersRepository.getAbsoluteQuantifiers().get(1).toggle();
+        //quantifiersRepository.getAbsoluteQuantifiers().get(0).toggle();
+        //quantifiersRepository.getAbsoluteQuantifiers().get(1).toggle();
 
+        quantifiersRepository.getRelativeQuantifiers().get(1).toggle();
         quantifiersRepository.getRelativeQuantifiers().get(2).toggle();
         quantifiersRepository.getRelativeQuantifiers().get(3).toggle();
 

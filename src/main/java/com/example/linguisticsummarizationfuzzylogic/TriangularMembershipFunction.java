@@ -23,4 +23,12 @@ public class TriangularMembershipFunction implements MembershipFunction {
             return (c - value) / (c - b);
         }
     }
+
+    public double getLength() {
+        return c - a;
+    }
+
+    public double getClm() {
+        return 0.5 * (c-a);
+    }
 }
