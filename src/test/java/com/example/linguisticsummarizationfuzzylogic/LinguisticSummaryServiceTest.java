@@ -17,6 +17,8 @@ public class LinguisticSummaryServiceTest {
     private static Path tempFile3;
     private static ElectoralDistricts electoralDistricts;
     private static ExcelDataController excelDataController;
+    private static EntityRepository entityRepository;
+    private static Path tempFile4;
 
     @BeforeAll
     public static void setUp() {
@@ -89,11 +91,39 @@ public class LinguisticSummaryServiceTest {
                     "Poparcie dla kandydata B,Umiarkowane,triangular,0.1,0.2,0.3",
                     "Poparcie dla kandydata B,Silne,triangular,0.3,0.45,0.7",
                     "Poparcie dla kandydata B,Dominujące,trapezoidal,0.6,0.7,1.0,1.0"
-                    ));
+            ));
+
+            tempFile4 = Files.createTempFile("test-data4", ".csv");
+            Files.write(tempFile4, List.of(
+                    "entityName,enityValue",
+                    "Area Type,miasto",
+                    "Area Type,wieś",
+                    "Area Type,statek",
+                    "Area Type,zagranica",
+                    "Voivodeship,dolnośląskie",
+                    "Voivodeship,kujawsko-pomorskie",
+                    "Voivodeship,lubelskie",
+                    "Voivodeship,lubuskie",
+                    "Voivodeship,łódzkie",
+                    "Voivodeship,małopolskie",
+                    "Voivodeship,mazowieckie",
+                    "Voivodeship,opolskie",
+                    "Voivodeship,podkarpackie",
+                    "Voivodeship,podlaskie",
+                    "Voivodeship,pomorskie",
+                    "Voivodeship,śląskie",
+                    "Voivodeship,świętokrzyskie",
+                    "Voivodeship,warmińsko-mazurskie",
+                    "Voivodeship,wielkopolskie",
+                    "Voivodeship,zachodniopomorskie"
+
+            ));
 
             linguisticRepository.loadFromCSV(tempFile3.toString());
 
             quantifiersRepository.loadFromCSV(tempFile1.toString(), tempFile2.toString());
+
+            entityRepository.loadFromCSV(tempFile4.toString());
 
         } catch (IOException e) {
             throw new RuntimeException("Błąd przy tworzeniu lub zapisie do tymczasowego pliku CSV", e);
@@ -110,11 +140,17 @@ public class LinguisticSummaryServiceTest {
     public void testLinguisticSummary() {
         //linguisticRepository.getLinguisticVariables().get(0).getTerms().get(1).toggle();
 //        linguisticRepository.getLinguisticVariables().get(2).getTerms().get(3).toggle();
-//        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(2).toggle();
-//        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(2).toggle();
+        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(0).toggle();
+        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(1).toggle();
+        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(2).toggle();
+        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(3).toggle();
+        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(0).toggle();
+        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(1).toggle();
+        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(2).toggle();
+        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(3).toggle();
 
-        quantifiersRepository.getAbsoluteQuantifiers().get(0).toggle();
-        quantifiersRepository.getAbsoluteQuantifiers().get(1).toggle();
+        //quantifiersRepository.getAbsoluteQuantifiers().get(0).toggle();
+        //quantifiersRepository.getAbsoluteQuantifiers().get(1).toggle();
         //quantifiersRepository.getAbsoluteQuantifiers().get(3).toggle();
 
         quantifiersRepository.getRelativeQuantifiers().get(0).toggle();
@@ -124,13 +160,13 @@ public class LinguisticSummaryServiceTest {
         quantifiersRepository.getRelativeQuantifiers().get(4).toggle();
 
         // Test if the linguistic summary is generated correctly
-        LinguisticSummaryService linguisticSummaryService = new LinguisticSummaryService(electoralDistricts, linguisticRepository, quantifiersRepository);
+        LinguisticSummaryService linguisticSummaryService = new LinguisticSummaryService(electoralDistricts, linguisticRepository, quantifiersRepository, entityRepository);
         linguisticSummaryService.prepareData();
         linguisticSummaryService.generateZadeh();
         //linguisticSummaryService.generateYager();
 
         for (LinguisticSummary summary : linguisticSummaryService.getLinguisticSummaries()) {
-            if (summary.getSummaryQualityEvaluator().getOverallQuality() > 0.85)
+            if (summary.getSummaryQualityEvaluator().getOverallQuality() > 0.7)
                 System.out.println(summary.getText());
         }
     }
@@ -142,6 +178,7 @@ public class LinguisticSummaryServiceTest {
             Files.deleteIfExists(tempFile1);
             Files.deleteIfExists(tempFile2);
             Files.deleteIfExists(tempFile3);
+            Files.deleteIfExists(tempFile4);
         } catch (IOException e) {
             throw new RuntimeException("Błąd przy usuwaniu tymczasowych plików CSV", e);
         }
