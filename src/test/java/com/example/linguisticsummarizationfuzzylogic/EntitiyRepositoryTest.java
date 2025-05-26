@@ -1,5 +1,6 @@
 package com.example.linguisticsummarizationfuzzylogic;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +10,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class EntitiyRepositoryTest {
@@ -60,11 +62,20 @@ public class EntitiyRepositoryTest {
         assertEquals(2, entityRepository.getEntities().size());
         assertEquals(4, entityRepository.getEntities().get(0).getValues().size());
         assertEquals("Area Type", entityRepository.getEntities().get(0).getName());
-        assertEquals("miasto", entityRepository.getEntities().get(0).getValues().get(0));
-        assertEquals("zagranica", entityRepository.getEntities().get(0).getValues().get(3));
+        assertTrue(entityRepository.getEntities().get(0).getValues().containsKey("miasto"));
+        assertTrue(entityRepository.getEntities().get(0).getValues().containsKey("zagranica"));
         assertEquals(16, entityRepository.getEntities().get(1).getValues().size());
         assertEquals("Voivodeship", entityRepository.getEntities().get(1).getName());
-        assertEquals("dolnośląskie", entityRepository.getEntities().get(1).getValues().get(0));
-        assertEquals("zachodniopomorskie", entityRepository.getEntities().get(1).getValues().get(15));
+        assertTrue(entityRepository.getEntities().get(1).getValues().containsKey("dolnośląskie"));
+        assertTrue(entityRepository.getEntities().get(1).getValues().containsKey("zachodniopomorskie"));
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        try {
+            Files.deleteIfExists(tempFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Błąd przy usuwaniu tymczasowych plików CSV", e);
+        }
     }
 }

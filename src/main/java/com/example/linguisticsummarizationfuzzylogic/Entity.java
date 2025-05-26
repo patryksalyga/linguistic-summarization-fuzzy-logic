@@ -1,22 +1,22 @@
 package com.example.linguisticsummarizationfuzzylogic;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Entity {
     private String name;
-    private List<String> values;
+    private Map<String, Boolean> values;
 
     public Entity(String name) {
         this.name = name;
-        values = new ArrayList<>();
+        values = new LinkedHashMap<>();
     }
 
     public void addValue(String value) {
-        values.add(value);
+        values.put(value, false);
     }
 
-    public List<String> getValues() {
+    public Map<String, Boolean> getValues() {
         return values;
     }
 

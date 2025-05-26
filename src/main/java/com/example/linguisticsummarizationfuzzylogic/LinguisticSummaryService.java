@@ -9,6 +9,7 @@ public class LinguisticSummaryService {
     private ElectoralDistricts electoralDistricts;
     private LinguisticRepository linguisticRepository;
     private QuantifiersRepository quantifiersRepository;
+    private EntityRepository entityRepository;
 
     private List<LinguisticSummary> linguisticSummaries = new ArrayList<>();
 
@@ -18,11 +19,12 @@ public class LinguisticSummaryService {
 
     private final int electoralDistrictsCount;
 
-    public LinguisticSummaryService(ElectoralDistricts electoralDistricts, LinguisticRepository linguisticRepository, QuantifiersRepository quantifiersRepository) {
+    public LinguisticSummaryService(ElectoralDistricts electoralDistricts, LinguisticRepository linguisticRepository, QuantifiersRepository quantifiersRepository, EntityRepository entityRepository) {
         this.electoralDistricts = electoralDistricts;
         this.linguisticRepository = linguisticRepository;
         this.quantifiersRepository = quantifiersRepository;
         this.electoralDistrictsCount = electoralDistricts.getDistricts().size();
+        this.entityRepository = entityRepository;
     }
 
     public void prepareData() {
