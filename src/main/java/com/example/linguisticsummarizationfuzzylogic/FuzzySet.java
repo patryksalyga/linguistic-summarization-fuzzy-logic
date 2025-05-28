@@ -6,11 +6,15 @@ public class FuzzySet {
     private final Map<Integer, Double> elements;
     private final List<Double> values;
     private final MembershipFunction membershipFunction;
+    private final List<ElectoralDistrict> electoralDistrictsList;
+    private final String name;
 
-    public FuzzySet(List<Double> values, MembershipFunction membershipFunction) {
+    public FuzzySet(List<Double> values, MembershipFunction membershipFunction, List<ElectoralDistrict> electoralDistrictsList, String name) {
         elements = new HashMap<>();
         this.values = values;
         this.membershipFunction = membershipFunction;
+        this.electoralDistrictsList = electoralDistrictsList;
+        this.name = name;
 
         for (int i = 0; i < values.size(); i++) {
             double value = values.get(i);
@@ -19,16 +23,20 @@ public class FuzzySet {
         }
     }
 
-    public FuzzySet(Map<Integer, Double> elements, List<Double> values, MembershipFunction membershipFunction) {
+    public FuzzySet(Map<Integer, Double> elements, List<Double> values, MembershipFunction membershipFunction, List<ElectoralDistrict> electoralDistrictsList, String name) {
         this.elements = elements;
         this.membershipFunction = membershipFunction;
         this.values = values;
+        this.electoralDistrictsList = electoralDistrictsList;
+        this.name = name;
     }
 
     public FuzzySet(Map<Integer, Double> elements, List<Double> values) {
         this.elements = elements;
-        this.values = values;
+        this.values = values    ;
         this.membershipFunction = null; // Default to null if not provided
+        this.electoralDistrictsList = null;
+        this.name = null;
     }
 
     public List<Double> getUniverseOfDiscourse() {
@@ -63,7 +71,7 @@ public class FuzzySet {
             normalizedValues.add(normalizedValue);
         }
 
-        return new FuzzySet(normalizedValues, membershipFunction);
+        return new FuzzySet(normalizedValues, membershipFunction, electoralDistrictsList, name);
     }
 
     public double DoF() {
@@ -104,7 +112,7 @@ public class FuzzySet {
     public FuzzySet power(double r) {
         Map<Integer, Double> powerElements = new HashMap<>(elements);
         powerElements.replaceAll((key, value) -> Math.pow(value, r));
-        return new FuzzySet(powerElements, values, membershipFunction);
+        return new FuzzySet(powerElements, values, membershipFunction, electoralDistrictsList, name);
     }
 
     public double cardinality() {
@@ -118,11 +126,36 @@ public class FuzzySet {
     public FuzzySet comp() {
         Map<Integer, Double> powerElements = new HashMap<>(elements);
         powerElements.replaceAll((key, value) -> 1 - value);
-        return new FuzzySet(powerElements, values, membershipFunction);
+        return new FuzzySet(powerElements, values, membershipFunction, electoralDistrictsList, name);
     }
 
     public Map<Integer, Double> getElements() {
         return elements;
+    }
+
+    public List<ElectoralDistrict> getAllElectoralDistricts() {
+        return electoralDistrictsList;
+    }
+
+    public List<ElectoralDistrict> getElectoralDistrictsList() {
+        List<ElectoralDistrict> electoralDistrictsList = new ArrayList<>();
+        elements.keySet().stream()
+                .sorted()
+                .forEach(key -> {
+                    Double value = elements.get(key);
+                    if (value != null && value == 0) {
+                        electoralDistrictsList.add(this.electoralDistrictsList.get(key));
+                    }
+                });
+        return electoralDistrictsList;
+    }
+
+    public MembershipFunction getMembershipFunction() {
+        return membershipFunction;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -130,5 +163,21 @@ public class FuzzySet {
         return "FuzzySet{" +
                 "elements=" + elements +
                 '}';
+    }
+
+    //Overloaded constructor for testing purposes
+    public FuzzySet(List<Double> values, MembershipFunction membershipFunction) {
+        elements = new HashMap<>();
+        this.values = values;
+        this.membershipFunction = membershipFunction;
+
+        for (int i = 0; i < values.size(); i++) {
+            double value = values.get(i);
+            double membershipValue = membershipFunction.getMembership(value);
+            elements.put(i, membershipValue);
+        }
+
+        this.electoralDistrictsList = null;
+        this.name = null;
     }
 }

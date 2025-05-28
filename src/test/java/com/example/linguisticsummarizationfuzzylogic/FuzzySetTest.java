@@ -151,7 +151,7 @@ public class FuzzySetTest {
         elements.put(3, 1.0);
         elements.put(4, 0.8);
 
-        FuzzySet nonConvexSet = new FuzzySet(elements, values, null);
+        FuzzySet nonConvexSet = new FuzzySet(elements, values);
         assertFalse(nonConvexSet.isConvex());
     }
 

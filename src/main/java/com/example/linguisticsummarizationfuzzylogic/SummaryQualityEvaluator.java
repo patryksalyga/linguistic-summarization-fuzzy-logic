@@ -144,6 +144,12 @@ public class SummaryQualityEvaluator {
             count++;
         }
 
+        for (EntityValue entityValue : linguisticSummary.getEntities()) {
+                double normalizedCardinality = (double) entityValue.getElectoralDistricts().size() / linguisticSummary.getElectoralDistrictsCount();
+                product *= normalizedCardinality;
+                count++;
+        }
+
         return 1.0 - Math.pow(product, 1.0 / count);
     }
 
@@ -157,7 +163,13 @@ public class SummaryQualityEvaluator {
         }
 
         for (FuzzySet fuzzySet : linguisticSummary.getQualifiers()) {
-            double normalizedCardinality = fuzzySet.cardinality() / (double) fuzzySet.getUniverseOfDiscourse().size();
+            double normalizedCardinality = fuzzySet.cardinality() / fuzzySet.getUniverseOfDiscourse().size();
+            product *= normalizedCardinality;
+            count++;
+        }
+
+        for (EntityValue entityValue : linguisticSummary.getEntities()) {
+            double normalizedCardinality = (double) entityValue.getElectoralDistricts().size() / linguisticSummary.getElectoralDistrictsCount();
             product *= normalizedCardinality;
             count++;
         }
@@ -167,6 +179,9 @@ public class SummaryQualityEvaluator {
 
     private double computeT11() {
         int length = linguisticSummary.getQualifiers().isEmpty() ? 1 : linguisticSummary.getQualifiers().size();
+
+        length += linguisticSummary.getEntities().isEmpty() ? 0 : linguisticSummary.getEntities().size();
+
         return 2 * Math.pow(0.5, length);
     }
 

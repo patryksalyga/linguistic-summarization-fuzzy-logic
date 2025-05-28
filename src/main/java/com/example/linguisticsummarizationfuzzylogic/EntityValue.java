@@ -21,7 +21,11 @@ public class EntityValue {
         return enabled;
     }
 
-    public void toogle(){
+    public void toggle(){
         this.enabled = !this.enabled;
+    }
+
+    public String getValue() {
+        return value;
     }
 }

@@ -112,4 +112,21 @@ public class ElectoralDistricts {
                 "districts=" + districts +
                 '}';
     }
+
+    public void addDistricts(List<ElectoralDistrict> electoralDistricts) {
+        for (ElectoralDistrict district : electoralDistricts) {
+            if (districts.contains(district)) {
+                continue; // Skip if the district already exists
+            }
+            addDistrict(district);
+        }
+    }
+
+    public void deleteDistricts(List<ElectoralDistrict> electoralDistrictsList) {
+        for (ElectoralDistrict district : electoralDistrictsList) {
+            if (districts.contains(district)) {
+                districts.remove(district);
+            }
+        }
+    }
 }

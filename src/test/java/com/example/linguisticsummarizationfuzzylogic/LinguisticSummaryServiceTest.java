@@ -139,16 +139,16 @@ public class LinguisticSummaryServiceTest {
 
     @Test
     public void testLinguisticSummary() {
-        //linguisticRepository.getLinguisticVariables().get(0).getTerms().get(1).toggle();
+//        linguisticRepository.getLinguisticVariables().get(0).getTerms().get(1).toggle();
 //        linguisticRepository.getLinguisticVariables().get(2).getTerms().get(3).toggle();
-       // linguisticRepository.getLinguisticVariables().get(9).getTerms().get(0).toggle();
+//        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(0).toggle();
 //        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(1).toggle();
-        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(2).toggle();
-//        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(3).toggle();
-//        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(0).toggle();
-        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(1).toggle();
-        //linguisticRepository.getLinguisticVariables().get(10).getTerms().get(2).toggle();
-        //linguisticRepository.getLinguisticVariables().get(10).getTerms().get(3).toggle();
+//        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(2).toggle();
+        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(3).toggle();
+        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(0).toggle();
+//        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(1).toggle();
+//        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(2).toggle();
+//        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(3).toggle();
 
         //quantifiersRepository.getAbsoluteQuantifiers().get(0).toggle();
         //quantifiersRepository.getAbsoluteQuantifiers().get(1).toggle();
@@ -160,11 +160,14 @@ public class LinguisticSummaryServiceTest {
         quantifiersRepository.getRelativeQuantifiers().get(3).toggle();
         quantifiersRepository.getRelativeQuantifiers().get(4).toggle();
 
+        entityRepository.getEntities().get(0).getValues().get(0).toggle();
+        entityRepository.getEntities().get(0).getValues().get(1).toggle();
+
 
         // Test if the linguistic summary is generated correctly
         LinguisticSummaryService linguisticSummaryService = new LinguisticSummaryService(electoralDistricts, linguisticRepository, quantifiersRepository, entityRepository);
         linguisticSummaryService.prepareData();
-        linguisticSummaryService.generateZadeh();
+        //linguisticSummaryService.generateZadeh();
         //linguisticSummaryService.generateYager();
         linguisticSummaryService.generateKacprzyk();
 
