@@ -15,7 +15,7 @@ public class EntityRepository {
         entities = new ArrayList<>();
     }
 
-    public void loadFromCSV(String entitiesPath) throws Exception {
+    public void loadFromCSV(String entitiesPath, ElectoralDistricts electoralDistricts) throws Exception {
         try (Reader reader = Files.newBufferedReader(Path.of(entitiesPath))) {
             try (CSVReader csvReader = new CSVReader(reader)) {
                 csvReader.readNext(); // Skip header
@@ -31,7 +31,7 @@ public class EntityRepository {
                         entities.add(currentEntity);
                     }
 
-                    currentEntity.addValue(line[1]);
+                    currentEntity.addValue(line[1], electoralDistricts);
                 }
             }
         }

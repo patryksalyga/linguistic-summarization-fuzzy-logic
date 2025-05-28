@@ -16,6 +16,7 @@ public class LinguisticSummaryService {
     private List<AbsoluteQuantifier> absoluteQuantifiers = new ArrayList<>();
     private List<RelativeQuantifier> relativeQuantifiers = new ArrayList<>();
     private Map<String, FuzzySet> fuzzySetsMap = new HashMap<>();
+    private List<EntityValue> entityValues = new ArrayList<>();
 
     private final int electoralDistrictsCount;
 
@@ -38,6 +39,12 @@ public class LinguisticSummaryService {
         for (RelativeQuantifier quantifier : quantifiersRepository.getRelativeQuantifiers()) {
             if (quantifier.isEnabled()) {
                 relativeQuantifiers.add(quantifier);
+            }
+        }
+
+        for (EntityValue entityValue : entityRepository.getEntities().get(0).getValues()) {
+            if (entityValue.isEnabled()) {
+                entityValues.add(entityValue);
             }
         }
 
@@ -118,6 +125,10 @@ public class LinguisticSummaryService {
         for (int r = 2; r <= keys.size(); r++) {
             generateYagerCombinations(keys, r, 0, new ArrayList<>(), fuzzySetsMap);
         }
+    }
+
+    public void generateKacprzyk() {
+
     }
 
     private void generateYagerCombinations(List<String> input, int r, int start,

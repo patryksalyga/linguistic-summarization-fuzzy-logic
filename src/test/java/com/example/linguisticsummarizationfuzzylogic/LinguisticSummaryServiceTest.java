@@ -24,6 +24,7 @@ public class LinguisticSummaryServiceTest {
     public static void setUp() {
         linguisticRepository = new LinguisticRepository();
         quantifiersRepository = new QuantifiersRepository();
+        entityRepository = new EntityRepository();
 
         try {
             tempFile1 = Files.createTempFile("test-data1", ".csv");
@@ -123,31 +124,31 @@ public class LinguisticSummaryServiceTest {
 
             quantifiersRepository.loadFromCSV(tempFile1.toString(), tempFile2.toString());
 
-            entityRepository.loadFromCSV(tempFile4.toString());
+            electoralDistricts = new ElectoralDistricts();
+            excelDataController = new ExcelDataController(electoralDistricts);
+            excelDataController.loadDataFromExcel("src/main/resources/com/example/linguisticsummarizationfuzzylogic/wybory2020.xlsx");
+
+            entityRepository.loadFromCSV(tempFile4.toString(), electoralDistricts);
 
         } catch (IOException e) {
             throw new RuntimeException("Błąd przy tworzeniu lub zapisie do tymczasowego pliku CSV", e);
         } catch (Exception e) {
             throw new RuntimeException("Błąd przy ładowaniu CSV do LinguisticRepository", e);
         }
-
-        electoralDistricts = new ElectoralDistricts();
-        excelDataController = new ExcelDataController(electoralDistricts);
-        excelDataController.loadDataFromExcel("src/main/resources/com/example/linguisticsummarizationfuzzylogic/wybory2020.xlsx");
     }
 
     @Test
     public void testLinguisticSummary() {
         //linguisticRepository.getLinguisticVariables().get(0).getTerms().get(1).toggle();
 //        linguisticRepository.getLinguisticVariables().get(2).getTerms().get(3).toggle();
-        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(0).toggle();
-        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(1).toggle();
+       // linguisticRepository.getLinguisticVariables().get(9).getTerms().get(0).toggle();
+//        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(1).toggle();
         linguisticRepository.getLinguisticVariables().get(9).getTerms().get(2).toggle();
-        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(3).toggle();
-        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(0).toggle();
+//        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(3).toggle();
+//        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(0).toggle();
         linguisticRepository.getLinguisticVariables().get(10).getTerms().get(1).toggle();
-        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(2).toggle();
-        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(3).toggle();
+        //linguisticRepository.getLinguisticVariables().get(10).getTerms().get(2).toggle();
+        //linguisticRepository.getLinguisticVariables().get(10).getTerms().get(3).toggle();
 
         //quantifiersRepository.getAbsoluteQuantifiers().get(0).toggle();
         //quantifiersRepository.getAbsoluteQuantifiers().get(1).toggle();
@@ -159,11 +160,13 @@ public class LinguisticSummaryServiceTest {
         quantifiersRepository.getRelativeQuantifiers().get(3).toggle();
         quantifiersRepository.getRelativeQuantifiers().get(4).toggle();
 
+
         // Test if the linguistic summary is generated correctly
         LinguisticSummaryService linguisticSummaryService = new LinguisticSummaryService(electoralDistricts, linguisticRepository, quantifiersRepository, entityRepository);
         linguisticSummaryService.prepareData();
         linguisticSummaryService.generateZadeh();
         //linguisticSummaryService.generateYager();
+        linguisticSummaryService.generateKacprzyk();
 
         for (LinguisticSummary summary : linguisticSummaryService.getLinguisticSummaries()) {
             if (summary.getSummaryQualityEvaluator().getOverallQuality() > 0.7)

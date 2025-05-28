@@ -16,10 +16,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class EntitiyRepositoryTest {
     private static EntityRepository entityRepository;
     private static Path tempFile;
+    private static ElectoralDistricts electoralDistricts;
+    private static ExcelDataController excelDataController;
 
     @BeforeAll
     public static void setUp() {
         entityRepository = new EntityRepository();
+        electoralDistricts = new ElectoralDistricts();
+        excelDataController = new ExcelDataController(electoralDistricts);
+        excelDataController.loadDataFromExcel("src/main/resources/com/example/linguisticsummarizationfuzzylogic/wybory2020.xlsx");
 
         try {
             tempFile = Files.createTempFile("test-data", ".csv");
@@ -48,7 +53,7 @@ public class EntitiyRepositoryTest {
 
             ));
 
-            entityRepository.loadFromCSV(tempFile.toString());
+            entityRepository.loadFromCSV(tempFile.toString(), electoralDistricts);
 
         } catch (IOException e) {
             throw new RuntimeException("Błąd przy tworzeniu lub zapisie do tymczasowego pliku CSV", e);
@@ -62,12 +67,22 @@ public class EntitiyRepositoryTest {
         assertEquals(2, entityRepository.getEntities().size());
         assertEquals(4, entityRepository.getEntities().get(0).getValues().size());
         assertEquals("Area Type", entityRepository.getEntities().get(0).getName());
-        assertTrue(entityRepository.getEntities().get(0).getValues().containsKey("miasto"));
-        assertTrue(entityRepository.getEntities().get(0).getValues().containsKey("zagranica"));
+
+        int sum = 0;
+        for (EntityValue value : entityRepository.getEntities().get(0).getValues()) {
+            sum += value.getElectoralDistricts().size();
+        }
+        assertEquals(electoralDistricts.getDistricts().size(), sum);
+
         assertEquals(16, entityRepository.getEntities().get(1).getValues().size());
         assertEquals("Voivodeship", entityRepository.getEntities().get(1).getName());
-        assertTrue(entityRepository.getEntities().get(1).getValues().containsKey("dolnośląskie"));
-        assertTrue(entityRepository.getEntities().get(1).getValues().containsKey("zachodniopomorskie"));
+
+        sum = 0;
+        for (EntityValue value : entityRepository.getEntities().get(1).getValues()) {
+            sum += value.getElectoralDistricts().size();
+        }
+        assertEquals(electoralDistricts.getDistricts().size() - entityRepository.getEntities().get(0).getValues().get(2).getElectoralDistricts().size() - entityRepository.getEntities().get(0).getValues().get(3).getElectoralDistricts().size(), sum);
+
     }
 
     @AfterAll
