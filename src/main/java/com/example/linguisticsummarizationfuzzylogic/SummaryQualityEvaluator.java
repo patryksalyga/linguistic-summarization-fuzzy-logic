@@ -15,6 +15,15 @@ public class SummaryQualityEvaluator {
         evaluate();
     }
 
+    public SummaryQualityEvaluator(FuzzySet fuzzySet1, FuzzySet fuzzySet2, RelativeQuantifier relativeQuantifier) {
+//        System.out.println("fuzzySet1 = " + fuzzySet1.getUniverseOfDiscourse().size() + ", fuzzySet2 = " + fuzzySet2.getUniverseOfDiscourse().size() + " " +
+//                "fuzzySet1 cardinality = " + fuzzySet1.cardinality() + ", fuzzySet2 cardinality = " + fuzzySet2.cardinality());
+        double score = ((1.0/ fuzzySet1.getUniverseOfDiscourse().size()) * fuzzySet1.cardinality()) /
+                (((1.0/ fuzzySet1.getUniverseOfDiscourse().size()) * fuzzySet1.cardinality()) + ((1.0 / fuzzySet2.getUniverseOfDiscourse().size()) * fuzzySet2.cardinality()));
+        //System.out.println("score = " + score);
+        this.overallQuality = relativeQuantifier.getMembership(score);
+    }
+
     private void evaluate() {
         qualityMeasures.put("T1", computeT1());
         qualityMeasures.put("T2", computeT2());

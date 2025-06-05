@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.linguisticsummarizationfuzzylogic.SummaryTableController"
+      spacing="10.0">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+
+    <TableView fx:id="summaryTable" prefWidth="1200">
+        <columns>
+            <TableColumn fx:id="textColumn" text="Podsumowanie" prefWidth="1000"/>
+            <TableColumn fx:id="overallColumn" text="Overall" prefWidth="70"/>
+            <TableColumn fx:id="t1Column" text="T1" prefWidth="60"/>
+            <TableColumn fx:id="t2Column" text="T2" prefWidth="60"/>
+            <TableColumn fx:id="t3Column" text="T3" prefWidth="60"/>
+            <TableColumn fx:id="t4Column" text="T4" prefWidth="60"/>
+            <TableColumn fx:id="t5Column" text="T5" prefWidth="60"/>
+            <TableColumn fx:id="t6Column" text="T6" prefWidth="60"/>
+            <TableColumn fx:id="t7Column" text="T7" prefWidth="60"/>
+            <TableColumn fx:id="t8Column" text="T8" prefWidth="60"/>
+            <TableColumn fx:id="t9Column" text="T9" prefWidth="60"/>
+            <TableColumn fx:id="t10Column" text="T10" prefWidth="60"/>
+            <TableColumn fx:id="t11Column" text="T11" prefWidth="60"/>
+        </columns>
+    </TableView>
+</VBox>

@@ -26,4 +26,8 @@ public class LinguisticTerm {
     public void toggle() {
         isEnabled = !isEnabled;
     }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
 }

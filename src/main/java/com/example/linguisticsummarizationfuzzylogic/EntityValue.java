@@ -28,4 +28,8 @@ public class EntityValue {
     public String getValue() {
         return value;
     }
+
+    public void setEnabled(boolean value) {
+        this.enabled = value;
+    }
 }

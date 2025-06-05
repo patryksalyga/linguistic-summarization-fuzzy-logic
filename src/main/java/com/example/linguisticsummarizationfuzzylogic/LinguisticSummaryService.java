@@ -46,6 +46,12 @@ public class LinguisticSummaryService {
             }
         }
 
+        for (EntityValue entityValue : entityRepository.getEntities().get(1).getValues()) {
+            if (entityValue.isEnabled()) {
+                entityValues.add(entityValue);
+            }
+        }
+
         for (LinguisticVariable linguisticVariable : linguisticRepository.getLinguisticVariables()) {
             for (LinguisticTerm linguisticTerm : linguisticVariable.getTerms()) {
                 if (linguisticTerm.isEnabled()) {
@@ -94,6 +100,7 @@ public class LinguisticSummaryService {
     }
 
     public void generateZadeh() {
+        System.out.println("Generating Zadeh");
         for (String key : fuzzySetsMap.keySet()) {
             FuzzySet fuzzySet = fuzzySetsMap.get(key);
             for (AbsoluteQuantifier absoluteQuantifier : absoluteQuantifiers) {
@@ -118,6 +125,7 @@ public class LinguisticSummaryService {
     }
 
     public void generateYager() {
+        System.out.println("Generating Yager");
         List<String> keys = new ArrayList<>(fuzzySetsMap.keySet());
 
         for (int r = 2; r <= keys.size(); r++) {
@@ -126,6 +134,7 @@ public class LinguisticSummaryService {
     }
 
     public void generateKacprzyk() {
+        System.out.println("Generating Kacprzyk");
         List<String> qualifierKeys = new ArrayList<>();
         List<String> summarizerKeys = new ArrayList<>();
 
@@ -210,6 +219,7 @@ public class LinguisticSummaryService {
                 }
 
             }
+            System.out.println(electoralDistricts.getDistricts().size());
                 for (String summarizerKey : currentSummarizer) {
                     List<Double> values = new ArrayList<>();
                     switch (fuzzySetsMap.get(summarizerKey).getName()) {
@@ -289,6 +299,407 @@ public class LinguisticSummaryService {
             currentKeys.add(input.get(i));
             generateYagerCombinations(input, r, i + 1, currentKeys, fuzzySetsMap);
             currentKeys.remove(currentKeys.size() - 1); // backtrack
+        }
+    }
+
+    public void generateComparativeSummaries() {
+        /// ///////////////////////////////////////////////////////////////////////////////////////
+        System.out.println("Generating Comparative Summaries");
+        List<String> keys = new ArrayList<>(fuzzySetsMap.keySet());
+
+        ElectoralDistricts electoralDistricts1 = new ElectoralDistricts();
+        ElectoralDistricts electoralDistricts2 = new ElectoralDistricts();
+
+        electoralDistricts1.addDistricts(entityValues.get(0).getElectoralDistricts());
+        electoralDistricts2.addDistricts(entityValues.get(1).getElectoralDistricts());
+
+        System.out.println("Electoral Districts 1: " + electoralDistricts1.getDistricts().size());
+        System.out.println("Electoral Districts 2: " + electoralDistricts2.getDistricts().size());
+
+        for (String key : keys) {
+            FuzzySet fuzzySet = fuzzySetsMap.get(key);
+
+            List<Double> values1 = new ArrayList<>();
+            List<Double> values2 = new ArrayList<>();
+
+            switch (fuzzySetsMap.get(key).getName()) {
+                case "Stopień przygotowania komisji":
+                    values1 = electoralDistricts1.getCommissionPreparationLevels();
+                    values2 = electoralDistricts2.getCommissionPreparationLevels();
+                    break;
+                case "Nadmiar kart":
+                    values1 = electoralDistricts1.getSurplusBallots();
+                    values2 = electoralDistricts2.getSurplusBallots();
+                    break;
+                case "Frekwencja wyborcza":
+                    values1 = electoralDistricts1.getVoterTurnouts();
+                    values2 = electoralDistricts2.getVoterTurnouts();
+                    break;
+                case "Mobliność wyborcza":
+                    values1 = electoralDistricts1.getVoterMobilizations();
+                    values2 = electoralDistricts2.getVoterMobilizations();
+                    break;
+                case "Zgodność urny z wydaniami kart":
+                    values1 = electoralDistricts1.getBallotBoxConsistencies();
+                    values2 = electoralDistricts2.getBallotBoxConsistencies();
+                    break;
+                case "Udział głosów korespondencyjnych":
+                    values1 = electoralDistricts1.getPostalVoteShares();
+                    values2 = electoralDistricts2.getPostalVoteShares();
+                    break;
+                case "Skala nieważnych kart":
+                    values1 = electoralDistricts1.getInvalidBallotsRates();
+                    values2 = electoralDistricts2.getInvalidBallotsRates();
+                    break;
+                case "Skuteczność głosowania":
+                    values1 = electoralDistricts1.getVotingEffectivenesses();
+                    values2 = electoralDistricts2.getVotingEffectivenesses();
+                    break;
+                case "Liczba głosujących przez pełnomocnika":
+                    values1 = electoralDistricts1.getProxyVotersCounts();
+                    values2 = electoralDistricts2.getProxyVotersCounts();
+                    break;
+                case "Poparcie dla kandydata A":
+                    values1 = electoralDistricts1.getCandidateASupports();
+                    values2 = electoralDistricts2.getCandidateASupports();
+                    break;
+                case "Poparcie dla kandydata B":
+                    values1 = electoralDistricts1.getCandidateBSupports();
+                    values2 = electoralDistricts2.getCandidateBSupports();
+                    break;
+            }
+            System.out.println("Values1 size: " + values1.size() + ", Values2 size: " + values2.size());
+
+            FuzzySet fuzzySet1 = new FuzzySet(values1, fuzzySet.getMembershipFunction(), electoralDistricts1.getDistricts(), fuzzySet.getName());
+            FuzzySet fuzzySet2 = new FuzzySet(values2, fuzzySet.getMembershipFunction(), electoralDistricts2.getDistricts(), fuzzySet.getName());
+
+            for (RelativeQuantifier relativeQuantifier : relativeQuantifiers) {
+                String text = relativeQuantifier.label + " obwódów wyborczych z " + entityValues.get(0).getValue() + " w porównaniu do obwodów z " + entityValues.get(1).getValue() + " ma " + key;
+                LinguisticSummary linguisticSummary = new LinguisticSummary(fuzzySet1, fuzzySet2, relativeQuantifier, text, electoralDistrictsCount);
+                linguisticSummaries.add(linguisticSummary);
+
+                text = relativeQuantifier.label + " obwódów wyborczych z " + entityValues.get(1).getValue() + " w porównaniu do obwodów z " + entityValues.get(0).getValue() + " ma " + key;
+                linguisticSummary = new LinguisticSummary(fuzzySet2, fuzzySet1, relativeQuantifier, text, electoralDistrictsCount);
+                linguisticSummaries.add(linguisticSummary);
+
+                
+//                System.out.println("4. " + "Więcej obwodów wyborczych z " + entityValues.get(0).getValue() + " niż obwodów z " + entityValues.get(1).getValue() + " ma " + key);
+//                System.out.println("4. " + "Więcej obwodów wyborczych z " + entityValues.get(1).getValue() + " niż obwodów z " + entityValues.get(0).getValue() + " ma " + key);
+            }
+        }
+
+        for (int r = 2; r <= keys.size(); r++) {
+            generateComparativeCombinations(keys, r, 0, new ArrayList<>(), fuzzySetsMap);
+        }
+        /// /////////////////////////////////////////////////////////////////////////////////////////////////
+        List<String> qualifierKeys = new ArrayList<>();
+        List<String> summarizerKeys = new ArrayList<>();
+
+        for (String key : fuzzySetsMap.keySet()) {
+            qualifierKeys.add(key);
+            summarizerKeys.add(key);
+        }
+
+        for (RelativeQuantifier quantifier : relativeQuantifiers) {
+            for (int qSize = 1; qSize < qualifierKeys.size(); qSize++) {
+                generateComparativeQualifierCombinations(qualifierKeys, qSize, 0, new ArrayList<>(), summarizerKeys, quantifier);
+            }
+        }
+    }
+
+    private void generateComparativeCombinations(List<String> input, int r, int start,
+                                           List<String> currentKeys, Map<String, FuzzySet> fuzzySetsMap) {
+
+        ElectoralDistricts electoralDistricts1 = new ElectoralDistricts();
+        ElectoralDistricts electoralDistricts2 = new ElectoralDistricts();
+
+        electoralDistricts1.addDistricts(entityValues.get(0).getElectoralDistricts());
+        electoralDistricts2.addDistricts(entityValues.get(1).getElectoralDistricts());
+
+        if (currentKeys.size() == r) {
+            List<FuzzySet> correspondingSets1 = new ArrayList<>();
+            List<FuzzySet> correspondingSets2 = new ArrayList<>();
+
+            for (String key : currentKeys) {
+                FuzzySet fuzzySet = fuzzySetsMap.get(key);
+
+                List<Double> values1 = new ArrayList<>();
+                List<Double> values2 = new ArrayList<>();
+
+                switch (fuzzySetsMap.get(key).getName()) {
+                    case "Stopień przygotowania komisji":
+                        values1 = electoralDistricts1.getCommissionPreparationLevels();
+                        values2 = electoralDistricts2.getCommissionPreparationLevels();
+                        break;
+                    case "Nadmiar kart":
+                        values1 = electoralDistricts1.getSurplusBallots();
+                        values2 = electoralDistricts2.getSurplusBallots();
+                        break;
+                    case "Frekwencja wyborcza":
+                        values1 = electoralDistricts1.getVoterTurnouts();
+                        values2 = electoralDistricts2.getVoterTurnouts();
+                        break;
+                    case "Mobliność wyborcza":
+                        values1 = electoralDistricts1.getVoterMobilizations();
+                        values2 = electoralDistricts2.getVoterMobilizations();
+                        break;
+                    case "Zgodność urny z wydaniami kart":
+                        values1 = electoralDistricts1.getBallotBoxConsistencies();
+                        values2 = electoralDistricts2.getBallotBoxConsistencies();
+                        break;
+                    case "Udział głosów korespondencyjnych":
+                        values1 = electoralDistricts1.getPostalVoteShares();
+                        values2 = electoralDistricts2.getPostalVoteShares();
+                        break;
+                    case "Skala nieważnych kart":
+                        values1 = electoralDistricts1.getInvalidBallotsRates();
+                        values2 = electoralDistricts2.getInvalidBallotsRates();
+                        break;
+                    case "Skuteczność głosowania":
+                        values1 = electoralDistricts1.getVotingEffectivenesses();
+                        values2 = electoralDistricts2.getVotingEffectivenesses();
+                        break;
+                    case "Liczba głosujących przez pełnomocnika":
+                        values1 = electoralDistricts1.getProxyVotersCounts();
+                        values2 = electoralDistricts2.getProxyVotersCounts();
+                        break;
+                    case "Poparcie dla kandydata A":
+                        values1 = electoralDistricts1.getCandidateASupports();
+                        values2 = electoralDistricts2.getCandidateASupports();
+                        break;
+                    case "Poparcie dla kandydata B":
+                        values1 = electoralDistricts1.getCandidateBSupports();
+                        values2 = electoralDistricts2.getCandidateBSupports();
+                        break;
+                }
+
+                FuzzySet fuzzySet1 = new FuzzySet(values1, fuzzySet.getMembershipFunction(), electoralDistricts1.getDistricts(), fuzzySet.getName());
+                FuzzySet fuzzySet2 = new FuzzySet(values2, fuzzySet.getMembershipFunction(), electoralDistricts2.getDistricts(), fuzzySet.getName());
+
+                correspondingSets1.add(fuzzySet1);
+                correspondingSets2.add(fuzzySet2);
+            }
+
+            for (RelativeQuantifier relativeQuantifier : relativeQuantifiers) {
+                String text = relativeQuantifier.label + " obwódów wyborczych z " + entityValues.get(0).getValue() + " w porównaniu do obwodów z " + entityValues.get(1).getValue() + " ma " + String.join(" i ", currentKeys);
+                LinguisticSummary linguisticSummary = new LinguisticSummary(correspondingSets1, correspondingSets2, relativeQuantifier, text, electoralDistrictsCount);
+                linguisticSummaries.add(linguisticSummary);
+
+                text = relativeQuantifier.label + " obwódów wyborczych z " + entityValues.get(1).getValue() + " w porównaniu do obwodów z " + entityValues.get(0).getValue() + " ma " + String.join(" i ", currentKeys);
+                linguisticSummary = new LinguisticSummary(correspondingSets2, correspondingSets1, relativeQuantifier, text, electoralDistrictsCount);
+                linguisticSummaries.add(linguisticSummary);
+
+
+//                System.out.println("4. " + "Więcej obwodów wyborczych z " + entityValues.get(0).getValue() + " niż obwodów z " + entityValues.get(1).getValue() + " ma " + String.join(" i ", currentKeys));
+//                System.out.println("4. " + "Więcej obwodów wyborczych z " + entityValues.get(1).getValue() + " niż obwodów z " + entityValues.get(0).getValue() + " ma " + String.join(" i ", currentKeys));
+            }
+
+            return;
+        }
+
+        for (int i = start; i < input.size(); i++) {
+            currentKeys.add(input.get(i));
+            generateComparativeCombinations(input, r, i + 1, currentKeys, fuzzySetsMap);
+            currentKeys.remove(currentKeys.size() - 1); // backtrack
+        }
+    }
+
+    private void generateComparativeQualifierCombinations(List<String> qualifierKeys, int qSize, int start,
+                                                       List<String> currentQualifier, List<String> summarizerPool,
+                                                       RelativeQuantifier quantifier) {
+        if (currentQualifier.size() == qSize) {
+            Set<String> qualifierSet = new HashSet<>(currentQualifier);
+            List<String> remainingSummarizers = summarizerPool.stream()
+                    .filter(key -> !qualifierSet.contains(key))
+                    .collect(Collectors.toList());
+
+            for (int sSize = 1; sSize <= remainingSummarizers.size(); sSize++) {
+                generateComparativeSummarizerCombinations(remainingSummarizers, sSize, 0, new ArrayList<>(), currentQualifier, quantifier);
+            }
+            return;
+        }
+
+        for (int i = start; i < qualifierKeys.size(); i++) {
+            currentQualifier.add(qualifierKeys.get(i));
+            generateComparativeQualifierCombinations(qualifierKeys, qSize, i + 1, currentQualifier, summarizerPool, quantifier);
+            currentQualifier.remove(currentQualifier.size() - 1); // backtrack
+        }
+    }
+
+    private void generateComparativeSummarizerCombinations(List<String> summarizerKeys, int sSize, int start,
+                                                        List<String> currentSummarizer, List<String> qualifier,
+                                                        RelativeQuantifier quantifier) {
+        if (currentSummarizer.size() == sSize) {
+            List<FuzzySet> qualifierFuzzySets = new ArrayList<>();
+            List<String> qualifierSummary = new ArrayList<>();
+
+            for (String qualifierKey : qualifier) {
+                qualifierFuzzySets.add(fuzzySetsMap.get(qualifierKey));
+                qualifierSummary.add(qualifierKey);
+            }
+
+            List<FuzzySet> correspondingSets1 = new ArrayList<>();
+            List<FuzzySet> correspondingSets2 = new ArrayList<>();
+
+            ElectoralDistricts electoralDistricts1 = new ElectoralDistricts();
+            ElectoralDistricts electoralDistricts2 = new ElectoralDistricts();
+
+            electoralDistricts1.addDistricts(entityValues.get(0).getElectoralDistricts());
+            electoralDistricts2.addDistricts(entityValues.get(1).getElectoralDistricts());
+
+
+            for (FuzzySet fuzzySet : qualifierFuzzySets) {
+                electoralDistricts2.deleteDistricts(fuzzySet.getElectoralDistrictsList());
+            }
+
+//            System.out.println(electoralDistricts1.getDistricts().size());
+//            System.out.println(electoralDistricts2.getDistricts().size());
+
+            for (String summarizerKey : currentSummarizer) {
+                List<Double> values1 = new ArrayList<>();
+                List<Double> values2 = new ArrayList<>();
+                switch (fuzzySetsMap.get(summarizerKey).getName()) {
+                    case "Stopień przygotowania komisji":
+                        values1 = electoralDistricts1.getCommissionPreparationLevels();
+                        values2 = electoralDistricts2.getCommissionPreparationLevels();
+                        break;
+                    case "Nadmiar kart":
+                        values1 = electoralDistricts1.getSurplusBallots();
+                        values2 = electoralDistricts2.getSurplusBallots();
+                        break;
+                    case "Frekwencja wyborcza":
+                        values1 = electoralDistricts1.getVoterTurnouts();
+                        values2 = electoralDistricts2.getVoterTurnouts();
+                        break;
+                    case "Mobliność wyborcza":
+                        values1 = electoralDistricts1.getVoterMobilizations();
+                        values2 = electoralDistricts2.getVoterMobilizations();
+                        break;
+                    case "Zgodność urny z wydaniami kart":
+                        values1 = electoralDistricts1.getBallotBoxConsistencies();
+                        values2 = electoralDistricts2.getBallotBoxConsistencies();
+                        break;
+                    case "Udział głosów korespondencyjnych":
+                        values1 = electoralDistricts1.getPostalVoteShares();
+                        values2 = electoralDistricts2.getPostalVoteShares();
+                        break;
+                    case "Skala nieważnych kart":
+                        values1 = electoralDistricts1.getInvalidBallotsRates();
+                        values2 = electoralDistricts2.getInvalidBallotsRates();
+                        break;
+                    case "Skuteczność głosowania":
+                        values1 = electoralDistricts1.getVotingEffectivenesses();
+                        values2 = electoralDistricts2.getVotingEffectivenesses();
+                        break;
+                    case "Liczba głosujących przez pełnomocnika":
+                        values1 = electoralDistricts1.getProxyVotersCounts();
+                        values2 = electoralDistricts2.getProxyVotersCounts();
+                        break;
+                    case "Poparcie dla kandydata A":
+                        values1 = electoralDistricts1.getCandidateASupports();
+                        values2 = electoralDistricts2.getCandidateASupports();
+                        break;
+                    case "Poparcie dla kandydata B":
+                        values1 = electoralDistricts1.getCandidateBSupports();
+                        values2 = electoralDistricts2.getCandidateBSupports();
+                        break;
+                }
+                FuzzySet fuzzySet1 = new FuzzySet(values1, fuzzySetsMap.get(summarizerKey).getMembershipFunction(), electoralDistricts1.getDistricts(), fuzzySetsMap.get(summarizerKey).getName());
+                FuzzySet fuzzySet2 = new FuzzySet(values2, fuzzySetsMap.get(summarizerKey).getMembershipFunction(), electoralDistricts2.getDistricts(), fuzzySetsMap.get(summarizerKey).getName());
+                correspondingSets1.add(fuzzySet1);
+                correspondingSets2.add(fuzzySet2);
+            }
+            String text = quantifier.label + " obwódów wyborczych z " + entityValues.get(0).getValue() + " w porównaniu do obwodów z " + entityValues.get(1).getValue() + ", które mają " + String.join(" i ", qualifierSummary) + " ma " + String.join(" i ", currentSummarizer);
+            LinguisticSummary linguisticSummary = new LinguisticSummary(correspondingSets1, correspondingSets2, quantifier, text, electoralDistrictsCount);
+            linguisticSummaries.add(linguisticSummary);
+            text = quantifier.label + " obwódów wyborczych z " + entityValues.get(1).getValue() +  ", które mają " + String.join(" i ", qualifierSummary) + " w porównaniu do obwodów z " + entityValues.get(0).getValue()  + " ma " + String.join(" i ", currentSummarizer);
+            linguisticSummary = new LinguisticSummary(correspondingSets2, correspondingSets1, quantifier, text, electoralDistrictsCount);
+            linguisticSummaries.add(linguisticSummary);
+
+            correspondingSets1.clear();
+            correspondingSets2.clear();
+
+            electoralDistricts1 = new ElectoralDistricts();
+            electoralDistricts2 = new ElectoralDistricts();
+
+            electoralDistricts1.addDistricts(entityValues.get(0).getElectoralDistricts());
+            electoralDistricts2.addDistricts(entityValues.get(1).getElectoralDistricts());
+
+
+            for (FuzzySet fuzzySet : qualifierFuzzySets) {
+                electoralDistricts1.deleteDistricts(fuzzySet.getElectoralDistrictsList());
+            }
+
+//            System.out.println(electoralDistricts1.getDistricts().size());
+//            System.out.println(electoralDistricts2.getDistricts().size());
+
+            for (String summarizerKey : currentSummarizer) {
+                List<Double> values1 = new ArrayList<>();
+                List<Double> values2 = new ArrayList<>();
+                switch (fuzzySetsMap.get(summarizerKey).getName()) {
+                    case "Stopień przygotowania komisji":
+                        values1 = electoralDistricts1.getCommissionPreparationLevels();
+                        values2 = electoralDistricts2.getCommissionPreparationLevels();
+                        break;
+                    case "Nadmiar kart":
+                        values1 = electoralDistricts1.getSurplusBallots();
+                        values2 = electoralDistricts2.getSurplusBallots();
+                        break;
+                    case "Frekwencja wyborcza":
+                        values1 = electoralDistricts1.getVoterTurnouts();
+                        values2 = electoralDistricts2.getVoterTurnouts();
+                        break;
+                    case "Mobliność wyborcza":
+                        values1 = electoralDistricts1.getVoterMobilizations();
+                        values2 = electoralDistricts2.getVoterMobilizations();
+                        break;
+                    case "Zgodność urny z wydaniami kart":
+                        values1 = electoralDistricts1.getBallotBoxConsistencies();
+                        values2 = electoralDistricts2.getBallotBoxConsistencies();
+                        break;
+                    case "Udział głosów korespondencyjnych":
+                        values1 = electoralDistricts1.getPostalVoteShares();
+                        values2 = electoralDistricts2.getPostalVoteShares();
+                        break;
+                    case "Skala nieważnych kart":
+                        values1 = electoralDistricts1.getInvalidBallotsRates();
+                        values2 = electoralDistricts2.getInvalidBallotsRates();
+                        break;
+                    case "Skuteczność głosowania":
+                        values1 = electoralDistricts1.getVotingEffectivenesses();
+                        values2 = electoralDistricts2.getVotingEffectivenesses();
+                        break;
+                    case "Liczba głosujących przez pełnomocnika":
+                        values1 = electoralDistricts1.getProxyVotersCounts();
+                        values2 = electoralDistricts2.getProxyVotersCounts();
+                        break;
+                    case "Poparcie dla kandydata A":
+                        values1 = electoralDistricts1.getCandidateASupports();
+                        values2 = electoralDistricts2.getCandidateASupports();
+                        break;
+                    case "Poparcie dla kandydata B":
+                        values1 = electoralDistricts1.getCandidateBSupports();
+                        values2 = electoralDistricts2.getCandidateBSupports();
+                        break;
+                }
+                FuzzySet fuzzySet1 = new FuzzySet(values1, fuzzySetsMap.get(summarizerKey).getMembershipFunction(), electoralDistricts1.getDistricts(), fuzzySetsMap.get(summarizerKey).getName());
+                FuzzySet fuzzySet2 = new FuzzySet(values2, fuzzySetsMap.get(summarizerKey).getMembershipFunction(), electoralDistricts2.getDistricts(), fuzzySetsMap.get(summarizerKey).getName());
+                correspondingSets1.add(fuzzySet1);
+                correspondingSets2.add(fuzzySet2);
+            }
+            text = quantifier.label + " obwódów wyborczych z " + entityValues.get(1).getValue() + " w porównaniu do obwodów z " + entityValues.get(0).getValue() + ", które mają " + String.join(" i ", qualifierSummary) + " ma " + String.join(" i ", currentSummarizer);
+            linguisticSummary = new LinguisticSummary(correspondingSets1, correspondingSets2, quantifier, text, electoralDistrictsCount);
+            linguisticSummaries.add(linguisticSummary);
+            text = quantifier.label + " obwódów wyborczych z " + entityValues.get(0).getValue() +  ", które mają " + String.join(" i ", qualifierSummary) + " w porównaniu do obwodów z " + entityValues.get(1).getValue()  + " ma " + String.join(" i ", currentSummarizer);
+            linguisticSummary = new LinguisticSummary(correspondingSets2, correspondingSets1, quantifier, text, electoralDistrictsCount);
+            linguisticSummaries.add(linguisticSummary);
+            return;
+        }
+
+        for (int i = start; i < summarizerKeys.size(); i++) {
+            currentSummarizer.add(summarizerKeys.get(i));
+            generateComparativeSummarizerCombinations(summarizerKeys, sSize, i + 1, currentSummarizer, qualifier, quantifier);
+            currentSummarizer.remove(currentSummarizer.size() - 1); // backtrack
         }
     }
 

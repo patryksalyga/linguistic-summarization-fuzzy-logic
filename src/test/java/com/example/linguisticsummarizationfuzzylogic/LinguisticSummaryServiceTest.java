@@ -140,21 +140,21 @@ public class LinguisticSummaryServiceTest {
     @Test
     public void testLinguisticSummary() {
 //        linguisticRepository.getLinguisticVariables().get(0).getTerms().get(1).toggle();
-//        linguisticRepository.getLinguisticVariables().get(2).getTerms().get(3).toggle();
+        linguisticRepository.getLinguisticVariables().get(2).getTerms().get(3).toggle();
 //        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(0).toggle();
 //        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(1).toggle();
 //        linguisticRepository.getLinguisticVariables().get(9).getTerms().get(2).toggle();
         linguisticRepository.getLinguisticVariables().get(9).getTerms().get(3).toggle();
-        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(0).toggle();
+//        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(0).toggle();
 //        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(1).toggle();
-//        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(2).toggle();
+        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(2).toggle();
 //        linguisticRepository.getLinguisticVariables().get(10).getTerms().get(3).toggle();
 
         //quantifiersRepository.getAbsoluteQuantifiers().get(0).toggle();
         //quantifiersRepository.getAbsoluteQuantifiers().get(1).toggle();
         //quantifiersRepository.getAbsoluteQuantifiers().get(3).toggle();
 
-        quantifiersRepository.getRelativeQuantifiers().get(0).toggle();
+//        quantifiersRepository.getRelativeQuantifiers().get(0).toggle();
         quantifiersRepository.getRelativeQuantifiers().get(1).toggle();
         quantifiersRepository.getRelativeQuantifiers().get(2).toggle();
         quantifiersRepository.getRelativeQuantifiers().get(3).toggle();
@@ -169,10 +169,11 @@ public class LinguisticSummaryServiceTest {
         linguisticSummaryService.prepareData();
         //linguisticSummaryService.generateZadeh();
         //linguisticSummaryService.generateYager();
-        linguisticSummaryService.generateKacprzyk();
+        //linguisticSummaryService.generateKacprzyk();
+        linguisticSummaryService.generateComparativeSummaries();
 
         for (LinguisticSummary summary : linguisticSummaryService.getLinguisticSummaries()) {
-            if (summary.getSummaryQualityEvaluator().getOverallQuality() > 0.7)
+           // if (summary.getSummaryQualityEvaluator().getOverallQuality() > 0.7)
                 System.out.println(summary.getText());
         }
     }

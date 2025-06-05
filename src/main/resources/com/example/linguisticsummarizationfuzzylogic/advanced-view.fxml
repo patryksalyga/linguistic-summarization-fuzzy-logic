@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.geometry.Insets?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+      fx:controller="com.example.linguisticsummarizationfuzzylogic.AdvancedController"
+      spacing="10">
+
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+
+    <!-- Edytory CSV -->
+    <Label text="CSV 1:"/>
+    <TextArea fx:id="csvEditor1" prefRowCount="5"/>
+
+    <Label text="CSV 2:"/>
+    <TextArea fx:id="csvEditor2" prefRowCount="5"/>
+
+    <Label text="CSV 3:"/>
+    <TextArea fx:id="csvEditor3" prefRowCount="5"/>
+
+
+    <!-- Przyciski zapisu -->
+    <HBox spacing="10">
+        <Button text="Zapisz CSV 1" onAction="#saveCsv1"/>
+        <Button text="Zapisz CSV 2" onAction="#saveCsv2"/>
+        <Button text="Zapisz CSV 3" onAction="#saveCsv3"/>
+    </HBox>
+</VBox>

@@ -8,7 +8,7 @@ public abstract class Quantifier {
     public Quantifier(String label, MembershipFunction membershipFunction) {
         this.label = label;
         this.membershipFunction = membershipFunction;
-        this.isEnabled = false;
+        this.isEnabled = true;
     }
 
     public String getLabel() {

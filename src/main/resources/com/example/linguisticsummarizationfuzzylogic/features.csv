@@ -27,7 +27,7 @@ Skala nieważnych kart,Minimalna,trapezoidal,0.0,0.0,0.005,0.006
 Skala nieważnych kart,Typowa,triangular,0.005,0.01,0.015
 Skala nieważnych kart,Podwyższona,triangular,0.015,0.0225,0.03
 Skala nieważnych kart,Alarmująca,trapezoidal,0.03,0.04,1.0,1.0
-Skuteczność głosowania:Niska,trapezoidal,0.0,0.0,0.965,0.97
+Skuteczność głosowania,Niska,trapezoidal,0.0,0.0,0.965,0.97
 Skuteczność głosowania,Dobra,triangular,0.97,0.978,0.985
 Skuteczność głosowania,Wysoka,triangular,0.985,0.99,0.995
 Skuteczność głosowania,Bliska idealnej,trapezoidal,0.995,1.0,1.0,1.0
