@@ -24,8 +24,8 @@ public class SummaryQualityEvaluator {
         this.overallQuality = relativeQuantifier.getMembership(score);
     }
 
-    public SummaryQualityEvaluator(FuzzySet inclusion, FuzzySet fuzzySet2) {
-        this.overallQuality = 1.0 - (inclusion.cardinality() / fuzzySet2.cardinality());
+    public SummaryQualityEvaluator(FuzzySet inclusion) {
+        this.overallQuality = 1.0 - inclusion.averageMembership();
     }
 
 

@@ -143,7 +143,7 @@ public class LinguisticSummary {
     public LinguisticSummary(FuzzySet fuzzySet1, FuzzySet fuzzySet2, String text, int electoralDistrictsCount) {
         this.text = text;
         this.electoralDistrictsCount = electoralDistrictsCount;
-        summaryQualityEvaluator = new SummaryQualityEvaluator(fuzzySet1.inclusion(fuzzySet2), fuzzySet1);
+        summaryQualityEvaluator = new SummaryQualityEvaluator(fuzzySet1.inclusion(fuzzySet2));
     }
 
     public LinguisticSummary(List<FuzzySet> correspondingSets1, List<FuzzySet> correspondingSets2, RelativeQuantifier relativeQuantifier, String text, int electoralDistrictsCount) {
@@ -213,7 +213,7 @@ public class LinguisticSummary {
         }
         FuzzySet fuzzySet2 = new FuzzySet(elements, correspondingSets2.get(0).getUniverseOfDiscourse());
 
-        summaryQualityEvaluator = new SummaryQualityEvaluator(fuzzySet1.inclusion(fuzzySet2), fuzzySet1);
+        summaryQualityEvaluator = new SummaryQualityEvaluator(fuzzySet1.inclusion(fuzzySet2));
     }
 
     public FuzzySet getFuzzySet() {

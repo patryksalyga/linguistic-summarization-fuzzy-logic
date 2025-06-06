@@ -165,16 +165,28 @@ public class FuzzySet {
         int n = Math.min(this.values.size(), other.values.size());
 
         for (int i = 0; i < n; i++) {
-            double muA = this.elements.getOrDefault(i, 0.0);
-            double muB = other.elements.getOrDefault(i, 0.0);
-            double inclusionValue = Math.min(muA, muB);
+            double muA = this.elements.getOrDefault(i, 0.0); // this = P2
+            double muB = other.elements.getOrDefault(i, 0.0); // other = P1
+            double implicationValue = Math.min(1.0, 1.0 - muA + muB); // Implikacja Łukasiewicza
 
-            resultElements.put(i, inclusionValue);
+            resultElements.put(i, implicationValue);
             resultValues.add(this.values.get(i)); // Zakładamy wspólną dziedzinę
         }
 
         return new FuzzySet(resultElements, resultValues, this.membershipFunction, this.electoralDistrictsList, "Inclusion(" + this.name + ", " + other.name + ")");
     }
+
+
+    public double averageMembership() {
+        if (elements.isEmpty()) return 0.0;
+
+        double sum = 0.0;
+        for (double value : elements.values()) {
+            sum += value;
+        }
+        return sum / elements.size();
+    }
+
 
     @Override
     public String toString() {
