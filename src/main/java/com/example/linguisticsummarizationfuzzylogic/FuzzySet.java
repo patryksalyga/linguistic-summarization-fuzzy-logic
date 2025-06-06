@@ -166,9 +166,7 @@ public class FuzzySet {
 
         for (int i = 0; i < n; i++) {
             double muA = this.elements.getOrDefault(i, 0.0);
-            System.out.println(muA);
             double muB = other.elements.getOrDefault(i, 0.0);
-            System.out.println(muB);
             double inclusionValue = Math.min(muA, muB);
 
             resultElements.put(i, inclusionValue);
