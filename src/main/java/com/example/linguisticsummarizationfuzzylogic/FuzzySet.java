@@ -158,6 +158,26 @@ public class FuzzySet {
         return name;
     }
 
+    public FuzzySet inclusion(FuzzySet other) {
+        Map<Integer, Double> resultElements = new HashMap<>();
+        List<Double> resultValues = new ArrayList<>();
+
+        int n = Math.min(this.values.size(), other.values.size());
+
+        for (int i = 0; i < n; i++) {
+            double muA = this.elements.getOrDefault(i, 0.0);
+            System.out.println(muA);
+            double muB = other.elements.getOrDefault(i, 0.0);
+            System.out.println(muB);
+            double inclusionValue = Math.min(muA, muB);
+
+            resultElements.put(i, inclusionValue);
+            resultValues.add(this.values.get(i)); // Zakładamy wspólną dziedzinę
+        }
+
+        return new FuzzySet(resultElements, resultValues, this.membershipFunction, this.electoralDistrictsList, "Inclusion(" + this.name + ", " + other.name + ")");
+    }
+
     @Override
     public String toString() {
         return "FuzzySet{" +

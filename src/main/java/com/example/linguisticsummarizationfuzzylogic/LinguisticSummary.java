@@ -140,6 +140,12 @@ public class LinguisticSummary {
         summaryQualityEvaluator = new SummaryQualityEvaluator(fuzzySet1, fuzzySet2, relativeQuantifier);
     }
 
+    public LinguisticSummary(FuzzySet fuzzySet1, FuzzySet fuzzySet2, String text, int electoralDistrictsCount) {
+        this.text = text;
+        this.electoralDistrictsCount = electoralDistrictsCount;
+        summaryQualityEvaluator = new SummaryQualityEvaluator(fuzzySet1.inclusion(fuzzySet2), fuzzySet1);
+    }
+
     public LinguisticSummary(List<FuzzySet> correspondingSets1, List<FuzzySet> correspondingSets2, RelativeQuantifier relativeQuantifier, String text, int electoralDistrictsCount) {
         this.text = text;
         this.electoralDistrictsCount = electoralDistrictsCount;
@@ -173,6 +179,41 @@ public class LinguisticSummary {
         FuzzySet fuzzySet2 = new FuzzySet(elements, correspondingSets2.get(0).getUniverseOfDiscourse());
 
         summaryQualityEvaluator = new SummaryQualityEvaluator(fuzzySet1, fuzzySet2, relativeQuantifier);
+    }
+
+    public LinguisticSummary(List<FuzzySet> correspondingSets1, List<FuzzySet> correspondingSets2, String text, int electoralDistrictsCount) {
+        this.text = text;
+        this.electoralDistrictsCount = electoralDistrictsCount;
+
+        int length = correspondingSets1.get(0).getUniverseOfDiscourse().size();
+        Map<Integer, Double> elements = new HashMap<>();
+        for (int i = 0; i < length; i++) {
+            double min = Double.POSITIVE_INFINITY;
+            for (FuzzySet fuzzySet : correspondingSets1) {
+                double membershipValue = fuzzySet.getElements().get(i) != null ? fuzzySet.getElements().get(i) : 0.0;
+                if (membershipValue < min) {
+                    min = membershipValue;
+                }
+            }
+            elements.put(i, min);
+        }
+        FuzzySet fuzzySet1 = new FuzzySet(elements, correspondingSets1.get(0).getUniverseOfDiscourse());
+
+        length = correspondingSets2.get(0).getUniverseOfDiscourse().size();
+        elements = new HashMap<>();
+        for (int i = 0; i < length; i++) {
+            double min = Double.POSITIVE_INFINITY;
+            for (FuzzySet fuzzySet : correspondingSets2) {
+                double membershipValue = fuzzySet.getElements().get(i) != null ? fuzzySet.getElements().get(i) : 0.0;
+                if (membershipValue < min) {
+                    min = membershipValue;
+                }
+            }
+            elements.put(i, min);
+        }
+        FuzzySet fuzzySet2 = new FuzzySet(elements, correspondingSets2.get(0).getUniverseOfDiscourse());
+
+        summaryQualityEvaluator = new SummaryQualityEvaluator(fuzzySet1.inclusion(fuzzySet2), fuzzySet1);
     }
 
     public FuzzySet getFuzzySet() {

@@ -24,6 +24,11 @@ public class SummaryQualityEvaluator {
         this.overallQuality = relativeQuantifier.getMembership(score);
     }
 
+    public SummaryQualityEvaluator(FuzzySet inclusion, FuzzySet fuzzySet2) {
+        this.overallQuality = 1.0 - (inclusion.cardinality() / fuzzySet2.cardinality());
+    }
+
+
     private void evaluate() {
         qualityMeasures.put("T1", computeT1());
         qualityMeasures.put("T2", computeT2());
@@ -105,9 +110,9 @@ public class SummaryQualityEvaluator {
     private double computeT6() {
         // Degree of quantifier imprecision
         if (linguisticSummary.getQuantifier().getClass() == AbsoluteQuantifier.class) {
-            return linguisticSummary.getQuantifier().getMembershipFunction().getLength() / linguisticSummary.getElectoralDistrictsCount();
+            return 1.0 - (linguisticSummary.getQuantifier().getMembershipFunction().getLength(linguisticSummary.getElectoralDistrictsCount()) / linguisticSummary.getElectoralDistrictsCount());
         } else if (linguisticSummary.getQuantifier().getClass() == RelativeQuantifier.class) {
-            return linguisticSummary.getQuantifier().getMembershipFunction().getLength();
+            return 1.0 - linguisticSummary.getQuantifier().getMembershipFunction().getLength();
         } else {
             return 0.0;
         }
@@ -116,9 +121,9 @@ public class SummaryQualityEvaluator {
     private double computeT7() {
         // Degree of quantifier cardinality
         if (linguisticSummary.getQuantifier().getClass() == AbsoluteQuantifier.class) {
-            return linguisticSummary.getQuantifier().getMembershipFunction().getClm() / linguisticSummary.getElectoralDistrictsCount();
+            return 1.0 - (linguisticSummary.getQuantifier().getMembershipFunction().getClm(linguisticSummary.getElectoralDistrictsCount()) / linguisticSummary.getElectoralDistrictsCount());
         } else if (linguisticSummary.getQuantifier().getClass() == RelativeQuantifier.class) {
-            return linguisticSummary.getQuantifier().getMembershipFunction().getClm();
+            return 1.0 -  linguisticSummary.getQuantifier().getMembershipFunction().getClm();
         } else {
             return 0.0;
         }

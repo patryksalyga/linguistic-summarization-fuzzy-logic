@@ -31,4 +31,12 @@ public class TriangularMembershipFunction implements MembershipFunction {
     public double getClm() {
         return 0.5 * (c-a);
     }
+
+    public double getLength(int electoralDistrictsCount) {
+        return c - a;
+    }
+
+    public double getClm(int electoralDistrictsCount) {
+        return 0.5 * (c - a);
+    }
 }

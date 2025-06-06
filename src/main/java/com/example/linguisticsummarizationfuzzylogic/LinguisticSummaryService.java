@@ -219,7 +219,7 @@ public class LinguisticSummaryService {
                 }
 
             }
-            System.out.println(electoralDistricts.getDistricts().size());
+
                 for (String summarizerKey : currentSummarizer) {
                     List<Double> values = new ArrayList<>();
                     switch (fuzzySetsMap.get(summarizerKey).getName()) {
@@ -313,8 +313,8 @@ public class LinguisticSummaryService {
         electoralDistricts1.addDistricts(entityValues.get(0).getElectoralDistricts());
         electoralDistricts2.addDistricts(entityValues.get(1).getElectoralDistricts());
 
-        System.out.println("Electoral Districts 1: " + electoralDistricts1.getDistricts().size());
-        System.out.println("Electoral Districts 2: " + electoralDistricts2.getDistricts().size());
+        //System.out.println("Electoral Districts 1: " + electoralDistricts1.getDistricts().size());
+//        System.out.println("Electoral Districts 2: " + electoralDistricts2.getDistricts().size());
 
         for (String key : keys) {
             FuzzySet fuzzySet = fuzzySetsMap.get(key);
@@ -368,7 +368,7 @@ public class LinguisticSummaryService {
                     values2 = electoralDistricts2.getCandidateBSupports();
                     break;
             }
-            System.out.println("Values1 size: " + values1.size() + ", Values2 size: " + values2.size());
+            //System.out.println("Values1 size: " + values1.size() + ", Values2 size: " + values2.size());
 
             FuzzySet fuzzySet1 = new FuzzySet(values1, fuzzySet.getMembershipFunction(), electoralDistricts1.getDistricts(), fuzzySet.getName());
             FuzzySet fuzzySet2 = new FuzzySet(values2, fuzzySet.getMembershipFunction(), electoralDistricts2.getDistricts(), fuzzySet.getName());
@@ -382,10 +382,15 @@ public class LinguisticSummaryService {
                 linguisticSummary = new LinguisticSummary(fuzzySet2, fuzzySet1, relativeQuantifier, text, electoralDistrictsCount);
                 linguisticSummaries.add(linguisticSummary);
 
-                
-//                System.out.println("4. " + "Więcej obwodów wyborczych z " + entityValues.get(0).getValue() + " niż obwodów z " + entityValues.get(1).getValue() + " ma " + key);
-//                System.out.println("4. " + "Więcej obwodów wyborczych z " + entityValues.get(1).getValue() + " niż obwodów z " + entityValues.get(0).getValue() + " ma " + key);
             }
+
+            String text = "Więcej obwodów wyborczych z " + entityValues.get(0).getValue() + " niż obwodów z " + entityValues.get(1).getValue() + " ma " + key;
+            LinguisticSummary linguisticSummary = new LinguisticSummary(fuzzySet1, fuzzySet2, text, electoralDistrictsCount);
+            linguisticSummaries.add(linguisticSummary);
+
+            text = "Więcej obwodów wyborczych z " + entityValues.get(1).getValue() + " niż obwodów z " + entityValues.get(0).getValue() + " ma " + key;
+            linguisticSummary = new LinguisticSummary(fuzzySet2, fuzzySet1, text, electoralDistrictsCount);
+            linguisticSummaries.add(linguisticSummary);
         }
 
         for (int r = 2; r <= keys.size(); r++) {
@@ -488,11 +493,15 @@ public class LinguisticSummaryService {
                 text = relativeQuantifier.label + " obwódów wyborczych z " + entityValues.get(1).getValue() + " w porównaniu do obwodów z " + entityValues.get(0).getValue() + " ma " + String.join(" i ", currentKeys);
                 linguisticSummary = new LinguisticSummary(correspondingSets2, correspondingSets1, relativeQuantifier, text, electoralDistrictsCount);
                 linguisticSummaries.add(linguisticSummary);
-
-
-//                System.out.println("4. " + "Więcej obwodów wyborczych z " + entityValues.get(0).getValue() + " niż obwodów z " + entityValues.get(1).getValue() + " ma " + String.join(" i ", currentKeys));
-//                System.out.println("4. " + "Więcej obwodów wyborczych z " + entityValues.get(1).getValue() + " niż obwodów z " + entityValues.get(0).getValue() + " ma " + String.join(" i ", currentKeys));
             }
+
+            String text = "Więcej obwodów wyborczych z " + entityValues.get(0).getValue() + " niż obwodów z " + entityValues.get(1).getValue() + " ma " + String.join(" i ", currentKeys);
+            LinguisticSummary linguisticSummary = new LinguisticSummary(correspondingSets1, correspondingSets2, text, electoralDistrictsCount);
+            linguisticSummaries.add(linguisticSummary);
+
+            text = "Więcej obwodów wyborczych z " + entityValues.get(1).getValue() + " niż obwodów z " + entityValues.get(0).getValue() + " ma " + String.join(" i ", currentKeys);
+            linguisticSummary = new LinguisticSummary(correspondingSets2, correspondingSets1, text, electoralDistrictsCount);
+            linguisticSummaries.add(linguisticSummary);
 
             return;
         }
@@ -612,6 +621,7 @@ public class LinguisticSummaryService {
             String text = quantifier.label + " obwódów wyborczych z " + entityValues.get(0).getValue() + " w porównaniu do obwodów z " + entityValues.get(1).getValue() + ", które mają " + String.join(" i ", qualifierSummary) + " ma " + String.join(" i ", currentSummarizer);
             LinguisticSummary linguisticSummary = new LinguisticSummary(correspondingSets1, correspondingSets2, quantifier, text, electoralDistrictsCount);
             linguisticSummaries.add(linguisticSummary);
+
             text = quantifier.label + " obwódów wyborczych z " + entityValues.get(1).getValue() +  ", które mają " + String.join(" i ", qualifierSummary) + " w porównaniu do obwodów z " + entityValues.get(0).getValue()  + " ma " + String.join(" i ", currentSummarizer);
             linguisticSummary = new LinguisticSummary(correspondingSets2, correspondingSets1, quantifier, text, electoralDistrictsCount);
             linguisticSummaries.add(linguisticSummary);
@@ -690,6 +700,7 @@ public class LinguisticSummaryService {
             text = quantifier.label + " obwódów wyborczych z " + entityValues.get(1).getValue() + " w porównaniu do obwodów z " + entityValues.get(0).getValue() + ", które mają " + String.join(" i ", qualifierSummary) + " ma " + String.join(" i ", currentSummarizer);
             linguisticSummary = new LinguisticSummary(correspondingSets1, correspondingSets2, quantifier, text, electoralDistrictsCount);
             linguisticSummaries.add(linguisticSummary);
+
             text = quantifier.label + " obwódów wyborczych z " + entityValues.get(0).getValue() +  ", które mają " + String.join(" i ", qualifierSummary) + " w porównaniu do obwodów z " + entityValues.get(1).getValue()  + " ma " + String.join(" i ", currentSummarizer);
             linguisticSummary = new LinguisticSummary(correspondingSets2, correspondingSets1, quantifier, text, electoralDistrictsCount);
             linguisticSummaries.add(linguisticSummary);
