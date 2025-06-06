@@ -48,48 +48,60 @@ public class SummaryTableController {
         t11Column.setCellValueFactory(data -> fx(data.getValue().getSummaryQualityEvaluator().get("T11")));
     }
 
-    public void setSummaries(List<LinguisticSummary> summaries) {
-        summaryTable.setItems(FXCollections.observableArrayList(summaries));
-
-        // Eksport automatyczny po ustawieniu danych
-        exportToCSV("src/main/resources/com/example/linguisticsummarizationfuzzylogic/summaries.csv", true); // <- możesz zmienić ścieżkę lub false jeśli nie chcesz konsoli
+    public void setSummaries(List<LinguisticSummary> summaries, boolean isStandardSummaries) {
+        if (isStandardSummaries) {
+            summaryTable.setItems(FXCollections.observableArrayList(summaries));
+            exportToCSV("src/main/resources/com/example/linguisticsummarizationfuzzylogic/summaries.csv", true, false, summaries);
+        } else {
+            summaryTable.getItems().addAll(summaries);
+            exportToCSV("src/main/resources/com/example/linguisticsummarizationfuzzylogic/comparative_summaries.csv", false, false, summaries);
+        }
     }
+
+
 
     private ReadOnlyObjectWrapper<Double> fx(double value) {
         return new ReadOnlyObjectWrapper<>(value);
     }
 
-    private void exportToCSV(String filePath, boolean printToConsole) {
+    private void exportToCSV(String filePath, boolean standardSummaries, boolean printToConsole, List<LinguisticSummary> summariesToExport) {
         StringBuilder sb = new StringBuilder();
 
-        // Nagłówki
-        sb.append("Text,Overall,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11\n");
+        if (standardSummaries) {
+            sb.append("Text,Overall,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11\n");
 
-        for (LinguisticSummary summary : summaryTable.getItems()) {
-            var evaluator = summary.getSummaryQualityEvaluator();
-            sb.append("\"").append(summary.getText()).append("\"").append(",")
-                    .append(evaluator.getOverallQuality()).append(",")
-                    .append(evaluator.get("T1")).append(",")
-                    .append(evaluator.get("T2")).append(",")
-                    .append(evaluator.get("T3")).append(",")
-                    .append(evaluator.get("T4")).append(",")
-                    .append(evaluator.get("T5")).append(",")
-                    .append(evaluator.get("T6")).append(",")
-                    .append(evaluator.get("T7")).append(",")
-                    .append(evaluator.get("T8")).append(",")
-                    .append(evaluator.get("T9")).append(",")
-                    .append(evaluator.get("T10")).append(",")
-                    .append(evaluator.get("T11")).append("\n");
+            for (LinguisticSummary summary : summariesToExport) {
+                var evaluator = summary.getSummaryQualityEvaluator();
+                sb.append("\"").append(summary.getText()).append("\"").append(",")
+                        .append(evaluator.getOverallQuality()).append(",")
+                        .append(evaluator.get("T1")).append(",")
+                        .append(evaluator.get("T2")).append(",")
+                        .append(evaluator.get("T3")).append(",")
+                        .append(evaluator.get("T4")).append(",")
+                        .append(evaluator.get("T5")).append(",")
+                        .append(evaluator.get("T6")).append(",")
+                        .append(evaluator.get("T7")).append(",")
+                        .append(evaluator.get("T8")).append(",")
+                        .append(evaluator.get("T9")).append(",")
+                        .append(evaluator.get("T10")).append(",")
+                        .append(evaluator.get("T11")).append("\n");
+            }
+        } else {
+            sb.append("Text,Overall\n");
+
+            for (LinguisticSummary summary : summariesToExport) {
+                var evaluator = summary.getSummaryQualityEvaluator();
+                sb.append("\"").append(summary.getText()).append("\"").append(",")
+                        .append(evaluator.getOverallQuality()).append("\n");
+            }
         }
 
-        // Zapis do pliku
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write(sb.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Wypisanie na konsoli (jeśli potrzebne)
         if (printToConsole) {
             System.out.println(sb.toString());
         }

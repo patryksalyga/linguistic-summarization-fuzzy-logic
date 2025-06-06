@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HelloController {
@@ -180,16 +181,39 @@ public class HelloController {
             if(checkBox3.isSelected())linguisticSummaryService.generateZadeh();
             if(checkBox4.isSelected())linguisticSummaryService.generateYager();
             if(checkBox5.isSelected())linguisticSummaryService.generateKacprzyk();
-            if(checkBox6.isSelected())linguisticSummaryService.generateComparativeSummaries();
 
-            List<LinguisticSummary> summaries = linguisticSummaryService.getLinguisticSummaries();
-            System.out.println("Liczba wygenerowanych podsumowań po generowaniu: " + summaries.size());
+            List<LinguisticSummary> summaries = new ArrayList<>();
+
+            if (checkBox1.isSelected()){
+                summaries = linguisticSummaryService.getLinguisticSummariesOver();
+            } else if (checkBox2.isSelected()){
+                summaries = linguisticSummaryService.getLinguisticSummariesUnder();
+            } else {
+                summaries = linguisticSummaryService.getLinguisticSummaries();
+            }
+
+            System.out.println("Liczba wygenerowanych podsumowań jednopodmiotowych po generowaniu: " + summaries.size());
 
             SummaryTableController controller = loader.getController();
-            controller.setSummaries(summaries);
+            controller.setSummaries(summaries , true);
+
+            linguisticSummaryService.clearLinguisticSummaries();
+
+            if(checkBox6.isSelected())linguisticSummaryService.generateComparativeSummaries();
+
+            if (checkBox1.isSelected()){
+                summaries = linguisticSummaryService.getLinguisticSummariesOver();
+            } else if (checkBox2.isSelected()){
+                summaries = linguisticSummaryService.getLinguisticSummariesUnder();
+            } else {
+                summaries = linguisticSummaryService.getLinguisticSummaries();
+            }
+            System.out.println("Liczba wygenerowanych podsumowań dwupdomiotowych po generowaniu: " + summaries.size());
+
+            controller.setSummaries(summaries , false);
 
 
-            controller.setSummaries(summaries);
+            //controller.setSummaries(summaries);
 
             // Stwórz i pokaż nowe okno
             Stage stage = new Stage();

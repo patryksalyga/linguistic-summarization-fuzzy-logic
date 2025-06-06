@@ -718,6 +718,22 @@ public class LinguisticSummaryService {
         return linguisticSummaries;
     }
 
+    public List<LinguisticSummary> getLinguisticSummariesOver(){
+        return linguisticSummaries.stream()
+                .filter(summary -> summary.getSummaryQualityEvaluator().getOverallQuality() > 0.7)
+                .collect(Collectors.toList());
+    }
+
+    public List<LinguisticSummary> getLinguisticSummariesUnder(){
+        return linguisticSummaries.stream()
+                .filter(summary -> summary.getSummaryQualityEvaluator().getOverallQuality() < 0.3)
+                .collect(Collectors.toList());
+    }
+
+    public void clearLinguisticSummaries() {
+        linguisticSummaries.clear();
+    }
+
     public void clearData() {
         absoluteQuantifiers.clear();
         relativeQuantifiers.clear();
