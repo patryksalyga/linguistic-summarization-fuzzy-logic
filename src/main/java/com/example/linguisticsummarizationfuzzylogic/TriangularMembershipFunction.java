@@ -37,6 +37,9 @@ public class TriangularMembershipFunction implements MembershipFunction {
     }
 
     public double getClm(int electoralDistrictsCount) {
+        if (electoralDistrictsCount < c) {
+            c = electoralDistrictsCount;
+        }
         return 0.5 * (c - a);
     }
 }

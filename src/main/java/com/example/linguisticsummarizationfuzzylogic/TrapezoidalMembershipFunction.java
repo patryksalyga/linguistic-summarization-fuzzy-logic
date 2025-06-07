@@ -46,6 +46,14 @@ public class TrapezoidalMembershipFunction implements MembershipFunction {
     }
 
     public double getClm(int electoralDistrictsCount){
-        return  Math.min(((d-a) + (c-b)) / 2, ((electoralDistrictsCount-a) + (c-b)) / 2);
+        if (electoralDistrictsCount < c) {
+            c = electoralDistrictsCount;
+        }
+
+        if (electoralDistrictsCount < d) {
+            d = electoralDistrictsCount;
+            System.out.println(((d-a) + (c-b)) / 2);
+        }
+        return ((d-a) + (c-b)) / 2;
     }
 }
